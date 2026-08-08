@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Vally</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:#07111f;
+ color:white;
+}
+header{
+ background:#0d1b2e;
+ padding:18px;
+ border-bottom:1px solid #263952;
+}
+.logo{
+ font-size:28px;
+ font-weight:bold;
+}
+.logo span{color:#e8b63e}
+.container{
+ max-width:1100px;
+ margin:auto;
+ padding:20px;
+}
+.hero{
+ padding:25px 0;
+}
+.hero h1{
+ font-size:42px;
+ margin:0 0 8px;
+}
+.hero p{color:#9fb0c6}
+.cards{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:15px;
+}
+.card{
+ background:#102038;
+ border:1px solid #263952;
+ border-radius:14px;
+ padding:18px;
+}
+.label{
+ color:#9fb0c6;
+ font-size:13px;
+}
+.value{
+ font-size:27px;
+ font-weight:bold;
+ margin-top:8px;
+}
+.gold{color:#e8b63e}
+.green{color:#38d39f}
+.tabs{
+ display:flex;
+ gap:8px;
+ flex-wrap:wrap;
+ margin:25px 0 15px;
+}
+button{
+ background:#102038;
+ color:white;
+ border:1px solid #30445f;
+ padding:10px 16px;
+ border-radius:9px;
+ cursor:pointer;
+}
+button:hover{
+ border-color:#38d39f;
+}
+.news{
+ display:grid;
+ gap:12px;
+}
+.news-item{
+ background:#102038;
+ border:1px solid #263952;
+ padding:16px;
+ border-radius:12px;
+}
+.news-item h3{
+ margin:0 0 8px;
+ font-size:18px;
+}
+.news-item p{
+ margin:0;
+ color:#9fb0c6;
+ font-size:13px;
+}
+footer{
+ margin-top:40px;
+ padding:25px;
+ text-align:center;
+ color:#71839c;
+ border-top:1px solid #263952;
+}
+@media(max-width:700px){
+ .cards{grid-template-columns:1fr}
+ .hero h1{font-size:32px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="container">
+<div class="logo">Market <span>Vally</span></div>
+</div>
+</header>
+
+<main class="container">
+
+<section class="hero">
+<h1>India • America • Gold</h1>
+<p>
+India, America, Gold aur Stock Market ki important news ek hi jagah.
+</p>
+</section>
+
+<section class="cards">
+
+<div class="card">
+<div class="label">🥇 GOLD</div>
+<div class="value gold">Live Soon</div>
+<p class="label">Gold price</p>
+</div>
+
+<div class="card">
+<div class="label">💵 USD / INR</div>
+<div class="value">Live Soon</div>
+<p class="label">Dollar rate</p>
+</div>
+
+<div class="card">
+<div class="label">📈 NIFTY 50</div>
+<div class="value green">Live Soon</div>
+<p class="label">Indian market</p>
+</div>
+
+</section>
+
+<div class="tabs">
+<button onclick="showNews('all')">All News</button>
+<button onclick="showNews('india')">🇮🇳 India</button>
+<button onclick="showNews('usa')">🇺🇸 America</button>
+<button onclick="showNews('gold')">🥇 Gold</button>
+<button onclick="showNews('market')">📈 Markets</button>
+</div>
+
+<h2>Latest News</h2>
+
+<section class="news" id="news">
+
+<div class="news-item" data-category="india">
+<h3>🇮🇳 India Market News</h3>
+<p>Live India news yahan automatically दिखाई जाएगी.</p>
+</div>
+
+<div class="news-item" data-category="usa">
+<h3>🇺🇸 America Market News</h3>
+<p>US economy, Federal Reserve aur stock market updates.</p>
+</div>
+
+<div class="news-item" data-category="gold">
+<h3>🥇 Gold News</h3>
+<p>Gold price, dollar, interest rates aur global developments.</p>
+</div>
+
+<div class="news-item" data-category="market">
+<h3>📈 Global Markets</h3>
+<p>Nifty, Sensex, Nasdaq, Dow Jones aur global markets.</p>
+</div>
+
+</section>
+
+</main>
+
+<footer>
+Market Vally © 2026
+</footer>
+
+<script>
+function showNews(category){
+
+ const items=document.querySelectorAll(".news-item");
+
+ items.forEach(item=>{
+
+   if(category==="all"){
+     item.style.display="block";
+   }
+   else if(item.dataset.category===category){
+     item.style.display="block";
+   }
+   else{
+     item.style.display="none";
+   }
+
+ });
+
+}
+</script>
+
+</body>
+</html>
