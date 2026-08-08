@@ -3,107 +3,124 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Market Vally</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
 body{
- margin:0;
- font-family:Arial,sans-serif;
- background:#07111f;
- color:white;
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#071426;
+  color:white;
 }
+
 header{
- background:#0d1b2e;
- padding:18px;
- border-bottom:1px solid #263952;
+  background:#0d2038;
+  padding:18px 20px;
+  font-size:25px;
+  font-weight:bold;
 }
-.logo{
- font-size:28px;
- font-weight:bold;
+
+header span{
+  color:#f5b400;
 }
-.logo span{color:#e8b63e}
+
 .container{
- max-width:1100px;
- margin:auto;
- padding:20px;
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
 }
-.hero{
- padding:25px 0;
+
+h1{
+  font-size:30px;
 }
-.hero h1{
- font-size:42px;
- margin:0 0 8px;
+
+.subtitle{
+  color:#9fb0c5;
 }
-.hero p{color:#9fb0c6}
+
 .cards{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:15px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+  margin:25px 0;
 }
+
 .card{
- background:#102038;
- border:1px solid #263952;
- border-radius:14px;
- padding:18px;
+  background:#112642;
+  padding:20px;
+  border-radius:12px;
+  border:1px solid #1e3b60;
 }
-.label{
- color:#9fb0c6;
- font-size:13px;
+
+.card h3{
+  margin-top:0;
 }
+
 .value{
- font-size:27px;
- font-weight:bold;
- margin-top:8px;
+  font-size:24px;
+  color:#35d39b;
+  font-weight:bold;
 }
-.gold{color:#e8b63e}
-.green{color:#38d39f}
-.tabs{
- display:flex;
- gap:8px;
- flex-wrap:wrap;
- margin:25px 0 15px;
+
+.buttons{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:25px;
 }
+
 button{
- background:#102038;
- color:white;
- border:1px solid #30445f;
- padding:10px 16px;
- border-radius:9px;
- cursor:pointer;
+  background:#112642;
+  color:white;
+  border:1px solid #315174;
+  padding:10px 15px;
+  border-radius:8px;
+  cursor:pointer;
 }
+
 button:hover{
- border-color:#38d39f;
+  background:#1c3c60;
 }
+
 .news{
- display:grid;
- gap:12px;
+  background:#112642;
+  margin:12px 0;
+  padding:17px;
+  border-radius:10px;
+  border-left:4px solid #f5b400;
 }
-.news-item{
- background:#102038;
- border:1px solid #263952;
- padding:16px;
- border-radius:12px;
+
+.news a{
+  color:white;
+  text-decoration:none;
+  font-size:18px;
+  font-weight:bold;
 }
-.news-item h3{
- margin:0 0 8px;
- font-size:18px;
+
+.news p{
+  color:#aab8c8;
+  margin-bottom:0;
 }
-.news-item p{
- margin:0;
- color:#9fb0c6;
- font-size:13px;
+
+.loading{
+  color:#f5b400;
 }
+
 footer{
- margin-top:40px;
- padding:25px;
- text-align:center;
- color:#71839c;
- border-top:1px solid #263952;
+  text-align:center;
+  color:#75869b;
+  padding:40px;
 }
+
 @media(max-width:700px){
- .cards{grid-template-columns:1fr}
- .hero h1{font-size:32px}
+  .cards{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -111,102 +128,131 @@ footer{
 <body>
 
 <header>
-<div class="container">
-<div class="logo">Market <span>Vally</span></div>
-</div>
+  Market <span>Vally</span>
 </header>
 
-<main class="container">
+<div class="container">
 
-<section class="hero">
-<h1>India • America • Gold</h1>
-<p>
-India, America, Gold aur Stock Market ki important news ek hi jagah.
+<h1>🇮🇳 India • 🇺🇸 America • 🥇 Gold</h1>
+
+<p class="subtitle">
+India, America, Gold aur Stock Market ki important news ek jagah.
 </p>
-</section>
 
-<section class="cards">
-
-<div class="card">
-<div class="label">🥇 GOLD</div>
-<div class="value gold">Live Soon</div>
-<p class="label">Gold price</p>
-</div>
+<div class="cards">
 
 <div class="card">
-<div class="label">💵 USD / INR</div>
+<h3>🥇 GOLD</h3>
 <div class="value">Live Soon</div>
-<p class="label">Dollar rate</p>
+<p>Gold price</p>
 </div>
 
 <div class="card">
-<div class="label">📈 NIFTY 50</div>
-<div class="value green">Live Soon</div>
-<p class="label">Indian market</p>
+<h3>💵 USD / INR</h3>
+<div class="value">Live Soon</div>
+<p>Dollar rate</p>
 </div>
 
-</section>
-
-<div class="tabs">
-<button onclick="showNews('all')">All News</button>
-<button onclick="showNews('india')">🇮🇳 India</button>
-<button onclick="showNews('usa')">🇺🇸 America</button>
-<button onclick="showNews('gold')">🥇 Gold</button>
-<button onclick="showNews('market')">📈 Markets</button>
+<div class="card">
+<h3>📈 NIFTY 50</h3>
+<div class="value">Live Soon</div>
+<p>Indian market</p>
 </div>
 
-<h2>Latest News</h2>
-
-<section class="news" id="news">
-
-<div class="news-item" data-category="india">
-<h3>🇮🇳 India Market News</h3>
-<p>Live India news yahan automatically दिखाई जाएगी.</p>
 </div>
 
-<div class="news-item" data-category="usa">
-<h3>🇺🇸 America Market News</h3>
-<p>US economy, Federal Reserve aur stock market updates.</p>
+<div class="buttons">
+<button onclick="loadNews('India')">🇮🇳 India</button>
+<button onclick="loadNews('United States')">🇺🇸 America</button>
+<button onclick="loadNews('Gold')">🥇 Gold</button>
+<button onclick="loadNews('Stock Market')">📈 Markets</button>
 </div>
 
-<div class="news-item" data-category="gold">
-<h3>🥇 Gold News</h3>
-<p>Gold price, dollar, interest rates aur global developments.</p>
+<h2>📰 Latest News</h2>
+
+<div id="news">
+<p class="loading">News load ho rahi hai...</p>
 </div>
 
-<div class="news-item" data-category="market">
-<h3>📈 Global Markets</h3>
-<p>Nifty, Sensex, Nasdaq, Dow Jones aur global markets.</p>
 </div>
-
-</section>
-
-</main>
 
 <footer>
 Market Vally © 2026
 </footer>
 
 <script>
-function showNews(category){
 
- const items=document.querySelectorAll(".news-item");
+/* a7b6caffe9bd44c69add2d1faeb27988 */
+const API_KEY = "a7b6caffe9bd44c69add2d1faeb27988;
 
- items.forEach(item=>{
 
-   if(category==="all"){
-     item.style.display="block";
-   }
-   else if(item.dataset.category===category){
-     item.style.display="block";
-   }
-   else{
-     item.style.display="none";
-   }
+async function loadNews(topic){
 
- });
+  const newsBox = document.getElementById("news");
 
+  newsBox.innerHTML =
+  '<p class="loading">Latest news load ho rahi hai...</p>';
+
+  try{
+
+    const url =
+    "https://newsapi.org/v2/everything?q=" +
+    encodeURIComponent(topic) +
+    "&language=en&sortBy=publishedAt&pageSize=10&apiKey=" +
+    API_KEY;
+
+    const response = await fetch(url);
+
+    const data = await response.json();
+
+    if(data.status !== "ok"){
+      newsBox.innerHTML =
+      "<p>News API error: " +
+      (data.message || "Unknown error") +
+      "</p>";
+      return;
+    }
+
+    if(!data.articles || data.articles.length === 0){
+      newsBox.innerHTML =
+      "<p>Is category ki news nahi mili.</p>";
+      return;
+    }
+
+    newsBox.innerHTML = "";
+
+    data.articles.forEach(article => {
+
+      const div = document.createElement("div");
+      div.className = "news";
+
+      div.innerHTML = `
+        <a href="${article.url}" target="_blank">
+          ${article.title}
+        </a>
+        <p>
+          ${article.source?.name || ""}
+          • ${article.publishedAt ?
+          new Date(article.publishedAt).toLocaleString() : ""}
+        </p>
+      `;
+
+      newsBox.appendChild(div);
+
+    });
+
+  }catch(error){
+
+    newsBox.innerHTML =
+    "<p>Internet/API connection problem.</p>";
+
+  }
 }
+
+
+/* Page open hote hi India news */
+loadNews("India");
+
 </script>
 
 </body>
