@@ -1,126 +1,213 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Market Vally</title>
+<title>Market Vally | Smart Market Intelligence</title>
 
 <style>
 *{
   box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,Helvetica,sans-serif;
 }
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#071426;
-  color:white;
+  background:#07111f;
+  color:#fff;
 }
 
 header{
-  background:#0d2038;
-  padding:18px 20px;
-  font-size:25px;
-  font-weight:bold;
+  background:#0b1728;
+  padding:18px 16px;
+  border-bottom:1px solid #22334a;
+  position:sticky;
+  top:0;
+  z-index:10;
 }
 
-header span{
-  color:#f5b400;
+.logo{
+  font-size:26px;
+  font-weight:800;
+  color:#ffd54a;
+}
+
+.tagline{
+  color:#9fb0c7;
+  font-size:12px;
+  margin-top:4px;
+}
+
+nav{
+  margin-top:15px;
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+}
+
+nav button{
+  background:#14243a;
+  color:#fff;
+  border:1px solid #29405e;
+  padding:9px 14px;
+  border-radius:20px;
+  white-space:nowrap;
+}
+
+.hero{
+  padding:25px 16px;
+  background:linear-gradient(135deg,#0b1d35,#07111f);
+}
+
+.hero h1{
+  font-size:30px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  color:#aebed2;
+  line-height:1.5;
 }
 
 .container{
   max-width:1100px;
   margin:auto;
-  padding:20px;
+  padding:16px;
 }
 
-h1{
-  font-size:30px;
+.section-title{
+  font-size:21px;
+  margin:25px 0 14px;
 }
 
-.subtitle{
-  color:#9fb0c5;
-}
-
-.cards{
+.market-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-  margin:25px 0;
+  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+  gap:12px;
 }
 
 .card{
-  background:#112642;
-  padding:20px;
-  border-radius:12px;
-  border:1px solid #1e3b60;
+  background:#0e1c2e;
+  border:1px solid #213650;
+  border-radius:14px;
+  padding:16px;
 }
 
-.card h3{
-  margin-top:0;
+.card-title{
+  color:#aebed2;
+  font-size:13px;
 }
 
-.value{
-  font-size:24px;
-  color:#35d39b;
-  font-weight:bold;
+.price{
+  font-size:22px;
+  font-weight:700;
+  margin:9px 0;
 }
 
-.buttons{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  margin-bottom:25px;
+.green{
+  color:#38e08f;
 }
 
-button{
-  background:#112642;
-  color:white;
-  border:1px solid #315174;
-  padding:10px 15px;
-  border-radius:8px;
-  cursor:pointer;
+.red{
+  color:#ff6374;
 }
 
-button:hover{
-  background:#1c3c60;
+.yellow{
+  color:#ffd54a;
 }
 
 .news{
-  background:#112642;
-  margin:12px 0;
-  padding:17px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.news-card{
+  background:#0e1c2e;
+  border:1px solid #213650;
+  border-radius:14px;
+  padding:16px;
+}
+
+.news-tag{
+  display:inline-block;
+  font-size:11px;
+  padding:5px 8px;
+  border-radius:12px;
+  background:#182d47;
+  color:#7fc3ff;
+  margin-bottom:9px;
+}
+
+.news-card h3{
+  font-size:17px;
+  line-height:1.35;
+  margin-bottom:8px;
+}
+
+.news-card p{
+  color:#b5c2d1;
+  line-height:1.5;
+  font-size:14px;
+}
+
+.impact{
+  margin-top:12px;
+  padding:9px;
+  border-radius:8px;
+  background:#13263b;
+  font-size:13px;
+}
+
+.calendar{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  min-width:650px;
+  border-collapse:collapse;
+  background:#0e1c2e;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+th,td{
+  padding:13px 10px;
+  border-bottom:1px solid #213650;
+  text-align:left;
+  font-size:13px;
+}
+
+th{
+  color:#ffd54a;
+  background:#13243a;
+}
+
+.search{
+  width:100%;
+  padding:13px;
   border-radius:10px;
-  border-left:4px solid #f5b400;
-}
-
-.news a{
+  border:1px solid #29405e;
+  background:#0e1c2e;
   color:white;
-  text-decoration:none;
-  font-size:18px;
-  font-weight:bold;
-}
-
-.news p{
-  color:#aab8c8;
-  margin-bottom:0;
-}
-
-.loading{
-  color:#f5b400;
+  margin-bottom:15px;
+  outline:none;
 }
 
 footer{
+  margin-top:35px;
+  padding:25px 16px;
   text-align:center;
-  color:#75869b;
-  padding:40px;
+  color:#8799ae;
+  background:#050d18;
+  font-size:12px;
 }
 
-@media(max-width:700px){
-  .cards{
-    grid-template-columns:1fr;
-  }
+.disclaimer{
+  margin-top:10px;
+  color:#687b91;
 }
 </style>
 </head>
@@ -128,130 +215,319 @@ footer{
 <body>
 
 <header>
-  Market <span>Vally</span>
+  <div class="logo">MARKET VALLY 📈</div>
+  <div class="tagline">Smart Market Intelligence • Hindi + English</div>
+
+  <nav>
+    <button onclick="showSection('markets')">Markets</button>
+    <button onclick="showSection('gold')">Gold</button>
+    <button onclick="showSection('crypto')">Crypto</button>
+    <button onclick="showSection('news')">News</button>
+    <button onclick="showSection('calendar')">Calendar</button>
+  </nav>
 </header>
 
-<div class="container">
+<section class="hero">
+  <div class="container">
+    <h1>Market Vally</h1>
+    <p>
+      Indian Markets, Gold, Crypto & Global Economic News
+      — सब कुछ एक जगह।
+    </p>
+  </div>
+</section>
 
-<h1>🇮🇳 India • 🇺🇸 America • 🥇 Gold</h1>
+<main class="container">
 
-<p class="subtitle">
-India, America, Gold aur Stock Market ki important news ek jagah.
+<section id="markets">
+<h2 class="section-title">📊 Indian Markets</h2>
+
+<div class="market-grid">
+
+<div class="card">
+<div class="card-title">NIFTY 50</div>
+<div class="price">25,100.25</div>
+<div class="green">▲ +0.72%</div>
+</div>
+
+<div class="card">
+<div class="card-title">BANK NIFTY</div>
+<div class="price">57,420.80</div>
+<div class="green">▲ +0.54%</div>
+</div>
+
+<div class="card">
+<div class="card-title">SENSEX</div>
+<div class="price">82,420.15</div>
+<div class="green">▲ +0.61%</div>
+</div>
+
+<div class="card">
+<div class="card-title">USD / INR</div>
+<div class="price">₹87.20</div>
+<div class="red">▼ -0.18%</div>
+</div>
+
+</div>
+</section>
+
+
+<section id="gold">
+<h2 class="section-title">🪙 Gold Market</h2>
+
+<div class="market-grid">
+
+<div class="card">
+<div class="card-title">Gold 24K</div>
+<div class="price yellow">₹1,02,500</div>
+<div class="green">▲ +0.43%</div>
+</div>
+
+<div class="card">
+<div class="card-title">Gold International</div>
+<div class="price">$3,345</div>
+<div class="green">▲ +0.31%</div>
+</div>
+
+<div class="card">
+<div class="card-title">US Dollar</div>
+<div class="price">87.20</div>
+<div class="red">▼ -0.18%</div>
+</div>
+
+</div>
+</section>
+
+
+<section id="crypto">
+<h2 class="section-title">₿ Crypto Market</h2>
+
+<div class="market-grid">
+
+<div class="card">
+<div class="card-title">Bitcoin</div>
+<div class="price">₿ $118,450</div>
+<div class="green">▲ +2.10%</div>
+</div>
+
+<div class="card">
+<div class="card-title">Ethereum</div>
+<div class="price">Ξ $3,820</div>
+<div class="green">▲ +1.65%</div>
+</div>
+
+</div>
+</section>
+
+
+<section id="news">
+<h2 class="section-title">📰 Latest Market News</h2>
+
+<input
+class="search"
+id="searchBox"
+type="text"
+placeholder="Search news / खबर खोजें..."
+onkeyup="searchNews()"
+>
+
+<div class="news" id="newsList">
+
+<div class="news-card">
+<span class="news-tag">GOLD • FED</span>
+
+<h3>
+🇮🇳 Fed rate expectations may influence Gold prices
+</h3>
+
+<p>
+हिंदी: अमेरिकी ब्याज दरों में बदलाव की उम्मीद Gold की कीमतों को
+प्रभावित कर सकती है।
 </p>
 
-<div class="cards">
+<p style="margin-top:7px">
+English: Expectations around US interest rates may influence
+Gold prices and the Dollar.
+</p>
 
-<div class="card">
-<h3>🥇 GOLD</h3>
-<div class="value">Live Soon</div>
-<p>Gold price</p>
+<div class="impact">
+🟢 Gold Impact: Potentially Bullish
+</div>
 </div>
 
-<div class="card">
-<h3>💵 USD / INR</h3>
-<div class="value">Live Soon</div>
-<p>Dollar rate</p>
+
+<div class="news-card">
+<span class="news-tag">INFLATION • CPI</span>
+
+<h3>
+🇮🇳 US Inflation data in focus for Gold traders
+</h3>
+
+<p>
+हिंदी: अमेरिकी CPI data आने से पहले Gold market में volatility
+बढ़ सकती है।
+</p>
+
+<p style="margin-top:7px">
+English: Gold traders are watching upcoming US inflation data
+for clues about monetary policy.
+</p>
+
+<div class="impact">
+🟡 Gold Impact: High Volatility
+</div>
 </div>
 
-<div class="card">
-<h3>📈 NIFTY 50</h3>
-<div class="value">Live Soon</div>
-<p>Indian market</p>
+
+<div class="news-card">
+<span class="news-tag">USD • GOLD</span>
+
+<h3>
+Dollar movement remains important for Gold
+</h3>
+
+<p>
+हिंदी: Dollar मजबूत होने पर अक्सर Gold पर दबाव आ सकता है।
+</p>
+
+<p style="margin-top:7px">
+English: A stronger US Dollar can sometimes put pressure on
+Gold prices.
+</p>
+
+<div class="impact">
+🔴 Gold Impact: Potentially Bearish
+</div>
+</div>
+
+
+<div class="news-card">
+<span class="news-tag">GEOPOLITICS</span>
+
+<h3>
+Global geopolitical developments remain important for Gold
+</h3>
+
+<p>
+हिंदी: वैश्विक तनाव बढ़ने पर Gold की safe-haven demand बढ़ सकती है।
+</p>
+
+<p style="margin-top:7px">
+English: Rising geopolitical uncertainty can increase
+safe-haven demand for Gold.
+</p>
+
+<div class="impact">
+🟢 Gold Impact: Potentially Bullish
+</div>
 </div>
 
 </div>
+</section>
 
-<div class="buttons">
-<button onclick="loadNews('India')">🇮🇳 India</button>
-<button onclick="loadNews('United States')">🇺🇸 America</button>
-<button onclick="loadNews('Gold')">🥇 Gold</button>
-<button onclick="loadNews('Stock Market')">📈 Markets</button>
+
+<section id="calendar">
+<h2 class="section-title">📅 Economic Calendar</h2>
+
+<div class="calendar">
+
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Event</th>
+<th>Country</th>
+<th>Importance</th>
+<th>Gold Impact</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr>
+<td>Today</td>
+<td>US CPI</td>
+<td>🇺🇸 USA</td>
+<td>🔴 High</td>
+<td>🟡 High Volatility</td>
+</tr>
+
+<tr>
+<td>Upcoming</td>
+<td>Federal Reserve Decision</td>
+<td>🇺🇸 USA</td>
+<td>🔴 High</td>
+<td>🟢/🔴 Major</td>
+</tr>
+
+<tr>
+<td>Upcoming</td>
+<td>US Non-Farm Payrolls</td>
+<td>🇺🇸 USA</td>
+<td>🔴 High</td>
+<td>🟡 High</td>
+</tr>
+
+<tr>
+<td>Upcoming</td>
+<td>RBI Policy Meeting</td>
+<td>🇮🇳 India</td>
+<td>🟠 Medium</td>
+<td>🟡 Moderate</td>
+</tr>
+
+</tbody>
+</table>
+
 </div>
+</section>
 
-<h2>📰 Latest News</h2>
+</main>
 
-<div id="news">
-<p class="loading">News load ho rahi hai...</p>
-</div>
-
-</div>
 
 <footer>
-Market Vally © 2026
+<strong>MARKET VALLY</strong>
+<div class="disclaimer">
+Educational information only. This website does not provide
+financial or investment advice.
+</div>
 </footer>
+
 
 <script>
 
-/* a7b6caffe9bd44c69add2d1faeb27988 */
-const API_KEY = "a7b6caffe9bd44c69add2d1faeb27988;
+function showSection(id){
 
+document.getElementById(id).scrollIntoView({
+behavior:"smooth"
+});
 
-async function loadNews(topic){
-
-  const newsBox = document.getElementById("news");
-
-  newsBox.innerHTML =
-  '<p class="loading">Latest news load ho rahi hai...</p>';
-
-  try{
-
-    const url =
-    "https://newsapi.org/v2/everything?q=" +
-    encodeURIComponent(topic) +
-    "&language=en&sortBy=publishedAt&pageSize=10&apiKey=" +
-    API_KEY;
-
-    const response = await fetch(url);
-
-    const data = await response.json();
-
-    if(data.status !== "ok"){
-      newsBox.innerHTML =
-      "<p>News API error: " +
-      (data.message || "Unknown error") +
-      "</p>";
-      return;
-    }
-
-    if(!data.articles || data.articles.length === 0){
-      newsBox.innerHTML =
-      "<p>Is category ki news nahi mili.</p>";
-      return;
-    }
-
-    newsBox.innerHTML = "";
-
-    data.articles.forEach(article => {
-
-      const div = document.createElement("div");
-      div.className = "news";
-
-      div.innerHTML = `
-        <a href="${article.url}" target="_blank">
-          ${article.title}
-        </a>
-        <p>
-          ${article.source?.name || ""}
-          • ${article.publishedAt ?
-          new Date(article.publishedAt).toLocaleString() : ""}
-        </p>
-      `;
-
-      newsBox.appendChild(div);
-
-    });
-
-  }catch(error){
-
-    newsBox.innerHTML =
-    "<p>Internet/API connection problem.</p>";
-
-  }
 }
 
+function searchNews(){
 
-/* Page open hote hi India news */
-loadNews("India");
+let input =
+document.getElementById("searchBox")
+.value
+.toLowerCase();
+
+let cards =
+document.querySelectorAll(".news-card");
+
+cards.forEach(function(card){
+
+let text =
+card.innerText.toLowerCase();
+
+if(text.includes(input)){
+card.style.display="block";
+}else{
+card.style.display="none";
+}
+
+});
+
+}
 
 </script>
 
