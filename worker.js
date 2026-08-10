@@ -12,7 +12,9 @@ export default {
           "X-Api-Key": env.NEWS_API_KEY,
           "User-Agent": Market-Valley/1.0"
         }
-      });
+       }
+     );                              
+      
 
       return new Response(response.body, {
         status: response.status,
