@@ -15,10 +15,12 @@ export default {
       });
     }
 
+    // =========================
     // LIVE NEWS
+    // =========================
     if (url.pathname === "/api/news") {
       const apiUrl =
-        "https://newsapi.org/v2/everything?q=(stock OR stocks OR market OR Nifty OR Sensex OR India business OR RBI)&language=en&sortBy=publishedAt&pageSize=20";
+        "https://newsapi.org/v2/everything?q=(stock OR stocks OR market OR nifty OR sensex)&language=en&sortBy=publishedAt&pageSize=20";
 
       try {
         const response = await fetch(apiUrl, {
@@ -54,6 +56,91 @@ export default {
       }
     }
 
+    // =========================
+    // LIVE MARKET DATA - iDATA
+    // =========================
+    if (url.pathname === "/api/market") {
+      const apiUrl = "https://idata.fyi/api/nse/indices";
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "X-API-Key": env.MARKET_API_KEY,
+            "Accept": "application/json"
+          }
+        });
+
+        const data = await response.json();
+
+        return new Response(JSON.stringify(data), {
+          status: response.status,
+          headers: {
+            "Content-Type": "application/json",
+            ...corsHeaders
+          }
+        });
+      } catch (error) {
+        return new Response(
+          JSON.stringify({
+            status: "error",
+            message: error.message
+          }),
+          {
+            status: 500,
+            headers: {
+              "Content-Type": "application/json",
+              ...corsHeaders
+            }
+          }
+        );
+      }
+    }
+
+    // =========================
+    // LIVE PRE-MARKET
+    // =========================
+    if (url.pathname === "/api/pre-market") {
+      const apiUrl = "https://idata.fyi/api/nse/pre-market";
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "X-API-Key": env.MARKET_API_KEY,
+            "Accept": "application/json"
+          }
+        });
+
+        const data = await response.json();
+
+        return new Response(JSON.stringify(data), {
+          status: response.status,
+          headers: {
+            "Content-Type": "application/json",
+            ...corsHeaders
+          }
+        });
+      } catch (error) {
+        return new Response(
+          JSON.stringify({
+            status: "error",
+            message: error.message
+          }),
+          {
+            status: 500,
+            headers: {
+              "Content-Type": "application/json",
+              ...corsHeaders
+            }
+          }
+        );
+      }
+    }
+
+    // =========================
+    // DEFAULT - WEBSITE FILES
+    // =========================
     return env.ASSETS.fetch(request);
   }
 };
