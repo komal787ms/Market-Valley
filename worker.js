@@ -2,14 +2,12 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    // CORS
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type"
     };
 
-    // OPTIONS
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
@@ -17,16 +15,13 @@ export default {
       });
     }
 
-    // NEWS API
+    // LIVE NEWS
     if (url.pathname === "/api/news") {
+      const apiUrl =
+        "https://newsapi.org/v2/everything?q=(stock OR stocks OR market OR Nifty OR Sensex OR India business OR RBI)&language=en&sortBy=publishedAt&pageSize=20";
+
       try {
-        const category = url.searchParams.get("category") || "business";
-
-        const apiUrl =
-          `https://newsapi.org/v2/top-headlines?country=in&category=${encodeURIComponent(category)}&pageSize=20`;
-
         const response = await fetch(apiUrl, {
-          method: "GET",
           headers: {
             "X-Api-Key": env.NEWS_API_KEY,
             "User-Agent": "Market-Vally/1.0"
@@ -59,7 +54,6 @@ export default {
       }
     }
 
-    // WEBSITE
     return env.ASSETS.fetch(request);
   }
 };
