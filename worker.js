@@ -2,15 +2,16 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // News API
     if (url.pathname === "/api/news") {
-      const response = await fetch(
-        "https://newsapi.org/v2/top-headlines?country=in&category=business",
-        {
-          headers: {
-            "X-Api-Key": env.NEWS_API_KEY
-          }
+      const apiUrl =
+        "https://newsapi.org/v2/top-headlines?country=in&category=business";
+
+      const response = await fetch(apiUrl, {
+        headers: {
+          "X-Api-Key": env.NEWS_API_KEY
         }
-      );
+      });
 
       return new Response(response.body, {
         status: response.status,
@@ -21,6 +22,7 @@ export default {
       });
     }
 
-    return new Response("Market-Vally Worker is running");
+    // Website
+    return env.ASSETS.fetch(request);
   }
 };
