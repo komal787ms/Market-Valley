@@ -9,7 +9,8 @@ export default {
 
       const response = await fetch(apiUrl, {
         headers: {
-          "X-Api-Key": env.NEWS_API_KEY
+          "X-Api-Key": env.NEWS_API_KEY,
+          "User-Agent": Market-Valley/1.0"
         }
       });
 
