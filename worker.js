@@ -2,14 +2,14 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
-    // CORS headers
+    // CORS
     const corsHeaders = {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, OPTIONS",
       "Access-Control-Allow-Headers": "Content-Type"
     };
 
-    // OPTIONS request
+    // OPTIONS
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
@@ -17,12 +17,14 @@ export default {
       });
     }
 
-    // News API
+    // NEWS API
     if (url.pathname === "/api/news") {
-      const apiUrl =
-        "https://newsapi.org/v2/top-headlines?country=in&category=business&pageSize=20";
-
       try {
+        const category = url.searchParams.get("category") || "business";
+
+        const apiUrl =
+          `https://newsapi.org/v2/top-headlines?country=in&category=${encodeURIComponent(category)}&pageSize=20`;
+
         const response = await fetch(apiUrl, {
           method: "GET",
           headers: {
@@ -57,7 +59,7 @@ export default {
       }
     }
 
-    // Website
+    // WEBSITE
     return env.ASSETS.fetch(request);
   }
 };
