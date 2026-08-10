@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Market Vally | Smart Market Intelligence</title>
+
+<title>Market-Vally | Market Intelligence</title>
 
 <style>
 *{
@@ -13,6 +14,10 @@
   font-family:Arial,Helvetica,sans-serif;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   background:#07111f;
   color:#fff;
@@ -20,11 +25,11 @@ body{
 
 header{
   background:#0b1728;
-  padding:18px 16px;
+  padding:16px;
   border-bottom:1px solid #22334a;
   position:sticky;
   top:0;
-  z-index:10;
+  z-index:100;
 }
 
 .logo{
@@ -40,7 +45,7 @@ header{
 }
 
 nav{
-  margin-top:15px;
+  margin-top:14px;
   display:flex;
   gap:8px;
   overflow-x:auto;
@@ -53,21 +58,16 @@ nav button{
   padding:9px 14px;
   border-radius:20px;
   white-space:nowrap;
+  cursor:pointer;
+}
+
+nav button:hover{
+  background:#1d3452;
 }
 
 .hero{
-  padding:25px 16px;
+  padding:30px 16px;
   background:linear-gradient(135deg,#0b1d35,#07111f);
-}
-
-.hero h1{
-  font-size:30px;
-  margin-bottom:8px;
-}
-
-.hero p{
-  color:#aebed2;
-  line-height:1.5;
 }
 
 .container{
@@ -76,9 +76,19 @@ nav button{
   padding:16px;
 }
 
+.hero h1{
+  font-size:32px;
+  margin-bottom:8px;
+}
+
+.hero p{
+  color:#aebed2;
+  line-height:1.6;
+}
+
 .section-title{
   font-size:21px;
-  margin:25px 0 14px;
+  margin:26px 0 14px;
 }
 
 .market-grid{
@@ -100,7 +110,7 @@ nav button{
 }
 
 .price{
-  font-size:22px;
+  font-size:21px;
   font-weight:700;
   margin:9px 0;
 }
@@ -117,6 +127,17 @@ nav button{
   color:#ffd54a;
 }
 
+.search{
+  width:100%;
+  padding:14px;
+  border-radius:10px;
+  border:1px solid #29405e;
+  background:#0e1c2e;
+  color:#fff;
+  margin-bottom:15px;
+  outline:none;
+}
+
 .news{
   display:flex;
   flex-direction:column;
@@ -130,19 +151,15 @@ nav button{
   padding:16px;
 }
 
-.news-tag{
-  display:inline-block;
-  font-size:11px;
-  padding:5px 8px;
-  border-radius:12px;
-  background:#182d47;
-  color:#7fc3ff;
-  margin-bottom:9px;
+.news-source{
+  color:#ffd54a;
+  font-size:12px;
+  margin-bottom:7px;
 }
 
 .news-card h3{
   font-size:17px;
-  line-height:1.35;
+  line-height:1.4;
   margin-bottom:8px;
 }
 
@@ -152,12 +169,38 @@ nav button{
   font-size:14px;
 }
 
+.news-card a{
+  display:inline-block;
+  margin-top:12px;
+  color:#7fc3ff;
+  text-decoration:none;
+}
+
+.news-card a:hover{
+  text-decoration:underline;
+}
+
 .impact{
   margin-top:12px;
   padding:9px;
   border-radius:8px;
   background:#13263b;
   font-size:13px;
+  color:#d9e5f2;
+}
+
+.loading{
+  text-align:center;
+  padding:25px;
+  color:#9fb0c7;
+}
+
+.error{
+  background:#32151b;
+  border:1px solid #74313b;
+  padding:15px;
+  border-radius:10px;
+  color:#ff9da8;
 }
 
 .calendar{
@@ -169,8 +212,6 @@ table{
   min-width:650px;
   border-collapse:collapse;
   background:#0e1c2e;
-  border-radius:12px;
-  overflow:hidden;
 }
 
 th,td{
@@ -185,20 +226,9 @@ th{
   background:#13243a;
 }
 
-.search{
-  width:100%;
-  padding:13px;
-  border-radius:10px;
-  border:1px solid #29405e;
-  background:#0e1c2e;
-  color:white;
-  margin-bottom:15px;
-  outline:none;
-}
-
 footer{
   margin-top:35px;
-  padding:25px 16px;
+  padding:28px 16px;
   text-align:center;
   color:#8799ae;
   background:#050d18;
@@ -209,37 +239,63 @@ footer{
   margin-top:10px;
   color:#687b91;
 }
+
+.status{
+  margin-top:10px;
+  font-size:12px;
+  color:#38e08f;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-  <div class="logo">MARKET VALLY 📈</div>
-  <div class="tagline">Smart Market Intelligence • Hindi + English</div>
 
-  <nav>
-    <button onclick="showSection('markets')">Markets</button>
-    <button onclick="showSection('gold')">Gold</button>
-    <button onclick="showSection('crypto')">Crypto</button>
-    <button onclick="showSection('news')">News</button>
-    <button onclick="showSection('calendar')">Calendar</button>
-  </nav>
+<div class="logo">MARKET-VALLY 📈</div>
+
+<div class="tagline">
+Smart Market Intelligence • Hindi + English
+</div>
+
+<nav>
+<button onclick="showSection('markets')">Markets</button>
+<button onclick="showSection('gold')">Gold</button>
+<button onclick="showSection('crypto')">Crypto</button>
+<button onclick="showSection('news')">News</button>
+<button onclick="showSection('calendar')">Calendar</button>
+</nav>
+
 </header>
 
+
 <section class="hero">
-  <div class="container">
-    <h1>Market Vally</h1>
-    <p>
-      Indian Markets, Gold, Crypto & Global Economic News
-      — सब कुछ एक जगह।
-    </p>
-  </div>
+
+<div class="container">
+
+<h1>Market-Vally</h1>
+
+<p>
+Indian Markets, Gold, Crypto & Global Economic News —
+सब कुछ एक जगह।
+</p>
+
+<div class="status">
+● Live News Connected
+</div>
+
+</div>
+
 </section>
+
 
 <main class="container">
 
+
+<!-- MARKETS -->
+
 <section id="markets">
+
 <h2 class="section-title">📊 Indian Markets</h2>
 
 <div class="market-grid">
@@ -269,10 +325,14 @@ footer{
 </div>
 
 </div>
+
 </section>
 
 
+<!-- GOLD -->
+
 <section id="gold">
+
 <h2 class="section-title">🪙 Gold Market</h2>
 
 <div class="market-grid">
@@ -284,22 +344,26 @@ footer{
 </div>
 
 <div class="card">
-<div class="card-title">Gold International</div>
+<div class="card-title">International Gold</div>
 <div class="price">$3,345</div>
 <div class="green">▲ +0.31%</div>
 </div>
 
 <div class="card">
 <div class="card-title">US Dollar</div>
-<div class="price">87.20</div>
+<div class="price">₹87.20</div>
 <div class="red">▼ -0.18%</div>
 </div>
 
 </div>
+
 </section>
 
 
+<!-- CRYPTO -->
+
 <section id="crypto">
+
 <h2 class="section-title">₿ Crypto Market</h2>
 
 <div class="market-grid">
@@ -317,139 +381,65 @@ footer{
 </div>
 
 </div>
+
 </section>
 
 
+<!-- NEWS -->
+
 <section id="news">
+
 <h2 class="section-title">📰 Latest Market News</h2>
 
 <input
-class="search"
 id="searchBox"
+class="search"
 type="text"
 placeholder="Search news / खबर खोजें..."
-onkeyup="searchNews()"
+oninput="searchNews()"
 >
 
-<div class="news" id="newsList">
+<div id="newsList" class="news">
 
-<div class="news-card">
-<span class="news-tag">GOLD • FED</span>
-
-<h3>
-🇮🇳 Fed rate expectations may influence Gold prices
-</h3>
-
-<p>
-हिंदी: अमेरिकी ब्याज दरों में बदलाव की उम्मीद Gold की कीमतों को
-प्रभावित कर सकती है।
-</p>
-
-<p style="margin-top:7px">
-English: Expectations around US interest rates may influence
-Gold prices and the Dollar.
-</p>
-
-<div class="impact">
-🟢 Gold Impact: Potentially Bullish
-</div>
-</div>
-
-
-<div class="news-card">
-<span class="news-tag">INFLATION • CPI</span>
-
-<h3>
-🇮🇳 US Inflation data in focus for Gold traders
-</h3>
-
-<p>
-हिंदी: अमेरिकी CPI data आने से पहले Gold market में volatility
-बढ़ सकती है।
-</p>
-
-<p style="margin-top:7px">
-English: Gold traders are watching upcoming US inflation data
-for clues about monetary policy.
-</p>
-
-<div class="impact">
-🟡 Gold Impact: High Volatility
-</div>
-</div>
-
-
-<div class="news-card">
-<span class="news-tag">USD • GOLD</span>
-
-<h3>
-Dollar movement remains important for Gold
-</h3>
-
-<p>
-हिंदी: Dollar मजबूत होने पर अक्सर Gold पर दबाव आ सकता है।
-</p>
-
-<p style="margin-top:7px">
-English: A stronger US Dollar can sometimes put pressure on
-Gold prices.
-</p>
-
-<div class="impact">
-🔴 Gold Impact: Potentially Bearish
-</div>
-</div>
-
-
-<div class="news-card">
-<span class="news-tag">GEOPOLITICS</span>
-
-<h3>
-Global geopolitical developments remain important for Gold
-</h3>
-
-<p>
-हिंदी: वैश्विक तनाव बढ़ने पर Gold की safe-haven demand बढ़ सकती है।
-</p>
-
-<p style="margin-top:7px">
-English: Rising geopolitical uncertainty can increase
-safe-haven demand for Gold.
-</p>
-
-<div class="impact">
-🟢 Gold Impact: Potentially Bullish
-</div>
+<div class="loading">
+⏳ Loading latest news...
 </div>
 
 </div>
+
 </section>
 
 
+<!-- CALENDAR -->
+
 <section id="calendar">
+
 <h2 class="section-title">📅 Economic Calendar</h2>
 
 <div class="calendar">
 
 <table>
+
 <thead>
+
 <tr>
 <th>Date</th>
 <th>Event</th>
 <th>Country</th>
 <th>Importance</th>
-<th>Gold Impact</th>
+<th>Market Impact</th>
 </tr>
+
 </thead>
 
 <tbody>
 
 <tr>
-<td>Today</td>
+<td>Upcoming</td>
 <td>US CPI</td>
 <td>🇺🇸 USA</td>
 <td>🔴 High</td>
-<td>🟡 High Volatility</td>
+<td>🟡 High</td>
 </tr>
 
 <tr>
@@ -462,7 +452,7 @@ safe-haven demand for Gold.
 
 <tr>
 <td>Upcoming</td>
-<td>US Non-Farm Payrolls</td>
+<td>Non-Farm Payrolls</td>
 <td>🇺🇸 USA</td>
 <td>🔴 High</td>
 <td>🟡 High</td>
@@ -477,20 +467,26 @@ safe-haven demand for Gold.
 </tr>
 
 </tbody>
+
 </table>
 
 </div>
+
 </section>
+
 
 </main>
 
 
 <footer>
-<strong>MARKET VALLY</strong>
+
+<strong>MARKET-VALLY 📈</strong>
+
 <div class="disclaimer">
 Educational information only. This website does not provide
 financial or investment advice.
 </div>
+
 </footer>
 
 
@@ -504,30 +500,185 @@ behavior:"smooth"
 
 }
 
+
+/* LOAD NEWS */
+
+let allNews = [];
+
+
+async function loadNews(){
+
+const newsList =
+document.getElementById("newsList");
+
+try{
+
+const response =
+await fetch("/api/news");
+
+const data =
+await response.json();
+
+if(data.status !== "ok"){
+
+throw new Error(
+data.message || "News API error"
+);
+
+}
+
+allNews =
+data.articles || [];
+
+displayNews(allNews);
+
+}catch(error){
+
+newsList.innerHTML = `
+<div class="error">
+❌ News load नहीं हो सकी।
+<br><br>
+${error.message}
+</div>
+`;
+
+}
+
+}
+
+
+/* DISPLAY NEWS */
+
+function displayNews(articles){
+
+const newsList =
+document.getElementById("newsList");
+
+if(!articles.length){
+
+newsList.innerHTML = `
+<div class="loading">
+अभी कोई latest business news उपलब्ध नहीं है।
+</div>
+`;
+
+return;
+
+}
+
+newsList.innerHTML =
+articles.map(article => {
+
+const title =
+article.title || "Untitled News";
+
+const description =
+article.description ||
+"Latest market news and business update.";
+
+const source =
+article.source?.name ||
+"News Source";
+
+const url =
+article.url || "#";
+
+const image =
+article.urlToImage;
+
+return `
+
+<div class="news-card">
+
+<div class="news-source">
+📰 ${escapeHTML(source)}
+</div>
+
+<h3>
+${escapeHTML(title)}
+</h3>
+
+<p>
+${escapeHTML(description)}
+</p>
+
+<div class="impact">
+📊 Market Impact: Analysis coming soon
+</div>
+
+<a
+href="${url}"
+target="_blank"
+rel="noopener noreferrer"
+>
+Read Full News →
+</a>
+
+</div>
+
+`;
+
+}).join("");
+
+}
+
+
+/* SEARCH NEWS */
+
 function searchNews(){
 
-let input =
-document.getElementById("searchBox")
+const input =
+document
+.getElementById("searchBox")
 .value
+.toLowerCase()
+.trim();
+
+const filtered =
+allNews.filter(article => {
+
+const title =
+(article.title || "")
 .toLowerCase();
 
-let cards =
-document.querySelectorAll(".news-card");
+const description =
+(article.description || "")
+.toLowerCase();
 
-cards.forEach(function(card){
+const source =
+(article.source?.name || "")
+.toLowerCase();
 
-let text =
-card.innerText.toLowerCase();
-
-if(text.includes(input)){
-card.style.display="block";
-}else{
-card.style.display="none";
-}
+return (
+title.includes(input) ||
+description.includes(input) ||
+source.includes(input)
+);
 
 });
 
+displayNews(filtered);
+
 }
+
+
+/* SECURITY */
+
+function escapeHTML(text){
+
+return String(text)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* START */
+
+loadNews();
 
 </script>
 
