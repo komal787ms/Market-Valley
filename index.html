@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Market-Vally | Market Intelligence</title>
+<title>Market-Valley | Market Intelligence</title>
 
 <style>
 *{
@@ -666,9 +666,10 @@ async function loadMarketData() {
   try {
     const response = await fetch("/api/market");
     const result = await response.json();
+console.log("MARKET API RESULT:", result);
 
     const data = result.data || [];
-
+console.log("MARKET DATA:",data);
     const findIndex = (symbol) =>
       data.find(item => item.symbol === symbol);
 
@@ -701,6 +702,7 @@ async function loadMarketData() {
     console.error("Market data error:", error);
   }
 }
+  loadMarketData();
 /* SECURITY */
 
 function escapeHTML(text){
