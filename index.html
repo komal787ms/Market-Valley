@@ -670,39 +670,62 @@ console.log("MARKET API RESULT:", result);
 
     const data = result.data || [];
 console.log("MARKET DATA:",data);
-    const findIndex = (symbol) =>
-      data.find(item => item.symbol === symbol);
+   const findIndex = (symbol) =>
+    data.find(item =>
+        item.key === "BROAD MARKET INDICES" &&
+        item.symbol === symbol
+    );
 
-    const nifty = findIndex("NIFTY");
-    const bankNifty = findIndex("BANKNIFTY");
-    const sensex = findIndex("SENSEX");
+const nifty = findIndex("NIFTY");
+const bankNifty = findIndex("BANKNIFTY");
+const sensex = findIndex("SENSEX");
 
-    if (nifty) {
-      document.getElementById("niftyPrice").textContent =
-        nifty.ltp || "-";
-      document.getElementById("niftyChange").textContent =
-        "▲ " + (nifty.pe || "-");
-    }
+const getChange = (item) => {
+    if (!item || item.close == null || item.ltp == null) return "-";
 
-    if (bankNifty) {
-      document.getElementById("bankNiftyPrice").textContent =
-        bankNifty.ltp || "-";
-      document.getElementById("bankNiftyChange").textContent =
-        "▲ " + (bankNifty.pe || "-");
-    }
+    const change = ((item.ltp - item.close) / item.close) * 100;
 
-    if (sensex) {
-      document.getElementById("sensexPrice").textContent =
-        sensex.ltp || "-";
-      document.getElementById("sensexChange").textContent =
-        "▲ " + (sensex.pe || "-");
+    return (change >= 0 ? "▲ +" : "▼ ") + change.toFixed(2) + "%";
+};
+
+if (nifty) {
+    document.getElementById("niftyPrice").textContent =
+        Number(nifty.ltp).toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    document.getElementById("niftyChange").textContent =
+        getChange(nifty);
+}
+
+if (bankNifty) {
+    document.getElementById("bankNiftyPrice").textContent =
+        Number(bankNifty.ltp).toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    document.getElementById("bankNiftyChange").textContent =
+        getChange(bankNifty);
+}
+
+if (sensex) {
+    document.getElementById("sensexPrice").textContent =
+        Number(sensex.ltp).toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+    document.getElementById("sensexChange").textContent =
+        getChange(sensex);
+} 
     }
 
   } catch (error) {
     console.error("Market data error:", error);
   }
 }
-  loadMarketData();
 /* SECURITY */
 
 function escapeHTML(text){
