@@ -662,7 +662,45 @@ displayNews(filtered);
 
 }
 
+async function loadMarketData() {
+  try {
+    const response = await fetch("/api/market");
+    const result = await response.json();
 
+    const data = result.data || [];
+
+    const findIndex = (symbol) =>
+      data.find(item => item.symbol === symbol);
+
+    const nifty = findIndex("NIFTY");
+    const bankNifty = findIndex("BANKNIFTY");
+    const sensex = findIndex("SENSEX");
+
+    if (nifty) {
+      document.getElementById("niftyPrice").textContent =
+        nifty.ltp || "-";
+      document.getElementById("niftyChange").textContent =
+        "▲ " + (nifty.pe || "-");
+    }
+
+    if (bankNifty) {
+      document.getElementById("bankNiftyPrice").textContent =
+        bankNifty.ltp || "-";
+      document.getElementById("bankNiftyChange").textContent =
+        "▲ " + (bankNifty.pe || "-");
+    }
+
+    if (sensex) {
+      document.getElementById("sensexPrice").textContent =
+        sensex.ltp || "-";
+      document.getElementById("sensexChange").textContent =
+        "▲ " + (sensex.pe || "-");
+    }
+
+  } catch (error) {
+    console.error("Market data error:", error);
+  }
+}
 /* SECURITY */
 
 function escapeHTML(text){
@@ -680,7 +718,7 @@ return String(text)
 /* START */
 
 loadNews();
-
+loadMarketData();
 </script>
 
 </body>
