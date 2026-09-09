@@ -664,69 +664,153 @@ displayNews(filtered);
 
 async function loadMarketData() {
   try {
-    const response = await fetch("/api/market");
-    const result = await response.json();
-console.log("MARKET API RESULT:", result);
+    const response = await fetch("/api/market?v=" + Date.now(), {
+      cache: "no-store"
+    });
 
-    const data = result.data || [];
-console.log("MARKET DATA:",data);
-   const findIndex = (symbol) =>
-    data.find(item =>
-        item.key === "BROAD MARKET INDICES" &&
-        item.symbol === symbol
-    );
-
-const nifty = findIndex("NIFTY");
-const bankNifty = findIndex("BANKNIFTY");
-const sensex = findIndex("SENSEX");
-
-const getChange = (item) => {
-    if (!item || item.close == null || item.ltp == null) return "-";
-
-    const change = ((item.ltp - item.close) / item.close) * 100;
-
-    return (change >= 0 ? "▲ +" : "▼ ") + change.toFixed(2) + "%";
-};
-
-if (nifty) {
-    document.getElementById("niftyPrice").textContent =
-        Number(nifty.ltp).toLocaleString("en-IN", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-
-    document.getElementById("niftyChange").textContent =
-        getChange(nifty);
-}
-
-if (bankNifty) {
-    document.getElementById("bankNiftyPrice").textContent =
-        Number(bankNifty.ltp).toLocaleString("en-IN", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-
-    document.getElementById("bankNiftyChange").textContent =
-        getChange(bankNifty);
-}
-
-if (sensex) {
-    document.getElementById("sensexPrice").textContent =
-        Number(sensex.ltp).toLocaleString("en-IN", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        });
-
-    document.getElementById("sensexChange").textContent =
-        getChange(sensex);
-} 
+    if (!response.ok) {
+      throw new Error("Market API HTTP " + response.status);
     }
 
+    const result = await response.json();
+
+    console.log("MARKET API RESULT:", result);
+
+    const data = Array.isArray(result.data) ? result.data : [];
+
+    console.log("MARKET DATA:", data);
+
+    // Symbol ko safely find karne ke liye
+    function findMarket(...symbols) {
+      return data.find(item => {
+        const s = String(item.symbol || "")
+          .trim()
+          .toUpperCase();
+
+        return symbols.includes(s);
+      });
+    }
+
+    const nifty = findMarket(
+      "NIFTY",
+      "NIFTY50",
+      "NIFTY 50"
+    );
+
+    const bankNifty = findMarket(
+      "BANKNIFTY",
+      "BANK NIFTY",
+      "NIFTY BANK"
+    );
+
+    const sensex = findMarket(
+      "SENSEX",
+      "BSE SENSEX"
+    );
+
+    console.log("NIFTY:", nifty);
+    console.log("BANKNIFTY:", bankNifty);
+    console.log("SENSEX:", sensex);
+
+    // Number ko Indian format me dikhana
+    function formatPrice(value) {
+      const n = Number(String(value).replace(/,/g, ""));
+
+      if (!Number.isFinite(n)) return "-";
+
+      return n.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    // Change %
+    function getChange(item) {
+      if (!item) return "-";
+
+      const value =
+        item.pe ??
+        item.pChange ??
+        item.changePercent ??
+        item.change ??
+        item.percentChange;
+
+      if (value === undefined || value === null || value === "") {
+        return "-";
+      }
+
+      const n = Number(String(value).replace(/,/g, ""));
+
+      if (!Number.isFinite(n)) return String(value);
+
+      const arrow = n >= 0 ? "▲" : "▼";
+
+      return arrow + " " + (n >= 0 ? "+" : "") + n.toFixed(2) + "%";
+    }
+
+    function updateCard(item, priceId, changeId) {
+      if (!item) return;
+
+      const priceElement = document.getElementById(priceId);
+      const changeElement = document.getElementById(changeId);
+
+      if (priceElement) {
+        priceElement.textContent = formatPrice(item.ltp);
+      }
+
+      if (changeElement) {
+        const changeText = getChange(item);
+
+        changeElement.textContent = changeText;
+
+        const value =
+          Number(
+            String(
+              item.pe ??
+              item.pChange ??
+              item.changePercent ??
+              item.change ??
+              0
+            ).replace(/,/g, "")
+          );
+
+        changeElement.classList.remove("green", "red");
+
+        if (value >= 0) {
+          changeElement.classList.add("green");
+        } else {
+          changeElement.classList.add("red");
+        }
+      }
+    }
+
+    // NIFTY
+    updateCard(
+      nifty,
+      "niftyPrice",
+      "niftyChange"
+    );
+
+    // BANK NIFTY
+    updateCard(
+      bankNifty,
+      "bankNiftyPrice",
+      "bankNiftyChange"
+    );
+
+    // SENSEX
+    updateCard(
+      sensex,
+      "sensexPrice",
+      "sensexChange"
+    );
+
+    console.log("✅ MARKET CARDS UPDATED");
+
   } catch (error) {
-    console.error("Market data error:", error);
+    console.error("❌ Market data error:", error);
   }
 }
-/* SECURITY */
 
 function escapeHTML(text){
 
