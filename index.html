@@ -673,89 +673,128 @@ async function loadMarketData() {
     }
 
     const result = await response.json();
-
     console.log("MARKET API RESULT:", result);
 
     const data = Array.isArray(result.data) ? result.data : [];
 
-    console.log("MARKET DATA:", data);
-
-    // Symbol ko safely find karne ke liye
     function findMarket(...symbols) {
       return data.find(item => {
-        const s = String(item.symbol || "")
+        const symbol = String(item.symbol || "")
           .trim()
           .toUpperCase();
 
-        return symbols.includes(s);
+        return symbols.includes(symbol);
       });
     }
 
-    const nifty = findMarket(
-      "NIFTY",
-      "NIFTY50",
-      "NIFTY 50"
-    );
-
+    const nifty = findMarket("NIFTY", "NIFTY50", "NIFTY 50");
     const bankNifty = findMarket(
       "BANKNIFTY",
       "BANK NIFTY",
       "NIFTY BANK"
     );
+    const sensex = findMarket("SENSEX", "BSE SENSEX");
 
-    const sensex = findMarket(
-      "SENSEX",
-      "BSE SENSEX"
-    );
-
-    console.log("NIFTY:", nifty);
-    console.log("BANKNIFTY:", bankNifty);
-    console.log("SENSEX:", sensex);
-
-    // Number ko Indian format me dikhana
     function formatPrice(value) {
-      const n = Number(String(value).replace(/,/g, ""));
+      const number = Number(
+        String(value ?? "").replace(/,/g, "")
+      );
 
-      if (!Number.isFinite(n)) return "-";
+      if (!Number.isFinite(number)) return "-";
 
-      return n.toLocaleString("en-IN", {
+      return number.toLocaleString("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
       });
     }
 
-    // Change %
     function getChange(item) {
       if (!item) return "-";
 
-      const value =
-        item.pe ??
-        item.pChange ??
-        item.changePercent ??
-        item.change ??
-        item.percentChange;
+      let value;
 
-      if (value === undefined || value === null || value === "") {
+      // पहले actual percentage-change fields
+      if (
+        item.pChange !== undefined &&
+        item.pChange !== null &&
+        item.pChange !== ""
+      ) {
+        value = item.pChange;
+      }
+
+      else if (
+        item.changePercent !== undefined &&
+        item.changePercent !== null &&
+        item.changePercent !== ""
+      ) {
+        value = item.changePercent;
+      }
+
+      // API में 1-day return हो तो उसे use करो
+      else if (
+        item.r1D !== undefined &&
+        item.r1D !== null &&
+        item.r1D !== ""
+      ) {
+        value = item.r1D;
+      }
+
+      // आखिरी fallback: LTP और previous close से calculate
+      else if (item.ltp != null && item.close != null) {
+        const ltp = Number(
+          String(item.ltp).replace(/,/g, "")
+        );
+
+        const close = Number(
+          String(item.close).replace(/,/g, "")
+        );
+
+        if (
+          Number.isFinite(ltp) &&
+          Number.isFinite(close) &&
+          close !== 0
+        ) {
+          value = ((ltp - close) / close) * 100;
+        }
+      }
+
+      if (
+        value === undefined ||
+        value === null ||
+        value === ""
+      ) {
         return "-";
       }
 
-      const n = Number(String(value).replace(/,/g, ""));
+      const number = Number(
+        String(value).replace(/,/g, "")
+      );
 
-      if (!Number.isFinite(n)) return String(value);
+      if (!Number.isFinite(number)) {
+        return String(value);
+      }
 
-      const arrow = n >= 0 ? "▲" : "▼";
+      const arrow = number >= 0 ? "▲" : "▼";
+      const sign = number >= 0 ? "+" : "";
 
-      return arrow + " " + (n >= 0 ? "+" : "") + n.toFixed(2) + "%";
+      return arrow + " " + sign + number.toFixed(2) + "%";
     }
 
     function updateCard(item, priceId, changeId) {
-      if (!item) return;
+      if (!item) {
+        console.warn("Market symbol not found:", priceId);
+        return;
+      }
 
-      const priceElement = document.getElementById(priceId);
-      const changeElement = document.getElementById(changeId);
+      const priceElement =
+        document.getElementById(priceId);
+
+      const changeElement =
+        document.getElementById(changeId);
 
       if (priceElement) {
-        priceElement.textContent = formatPrice(item.ltp);
+        priceElement.textContent =
+          formatPrice(item.ltp);
       }
 
       if (changeElement) {
@@ -763,42 +802,70 @@ async function loadMarketData() {
 
         changeElement.textContent = changeText;
 
-        const value =
-          Number(
-            String(
-              item.pe ??
-              item.pChange ??
-              item.changePercent ??
-              item.change ??
-              0
-            ).replace(/,/g, "")
+        changeElement.classList.remove(
+          "green",
+          "red"
+        );
+
+        // Daily change determine
+        let value;
+
+        if (item.pChange != null) {
+          value = Number(item.pChange);
+        }
+
+        else if (item.changePercent != null) {
+          value = Number(item.changePercent);
+        }
+
+        else if (item.r1D != null) {
+          value = Number(item.r1D);
+        }
+
+        else if (
+          item.ltp != null &&
+          item.close != null
+        ) {
+          const ltp = Number(
+            String(item.ltp).replace(/,/g, "")
           );
 
-        changeElement.classList.remove("green", "red");
+          const close = Number(
+            String(item.close).replace(/,/g, "")
+          );
 
-        if (value >= 0) {
-          changeElement.classList.add("green");
-        } else {
-          changeElement.classList.add("red");
+          if (
+            Number.isFinite(ltp) &&
+            Number.isFinite(close) &&
+            close !== 0
+          ) {
+            value = ((ltp - close) / close) * 100;
+          }
+        }
+
+        if (Number.isFinite(value)) {
+          if (value >= 0) {
+            changeElement.classList.add("green");
+          } else {
+            changeElement.classList.add("red");
+          }
         }
       }
     }
 
-    // NIFTY
+    // Market cards update
     updateCard(
       nifty,
       "niftyPrice",
       "niftyChange"
     );
 
-    // BANK NIFTY
     updateCard(
       bankNifty,
       "bankNiftyPrice",
       "bankNiftyChange"
     );
 
-    // SENSEX
     updateCard(
       sensex,
       "sensexPrice",
@@ -808,13 +875,19 @@ async function loadMarketData() {
     console.log("✅ MARKET CARDS UPDATED");
 
   } catch (error) {
-    console.error("❌ Market data error:", error);
+    console.error(
+      "❌ Market data error:",
+      error
+    );
   }
 }
 
-function escapeHTML(text){
 
-return String(text)
+// पहली बार तुरंत data
+loadMarketData();
+
+// हर 30 सेकंड में नया data
+setInterval(loadMarketData, 30000);
 .replace(/&/g,"&amp;")
 .replace(/</g,"&lt;")
 .replace(/>/g,"&gt;")
