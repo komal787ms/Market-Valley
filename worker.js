@@ -8,6 +8,9 @@ export default {
       "Access-Control-Allow-Headers": "Content-Type"
     };
 
+    // =========================
+    // CORS
+    // =========================
     if (request.method === "OPTIONS") {
       return new Response(null, {
         status: 204,
@@ -30,15 +33,16 @@ export default {
           }
         });
 
-        const data = await response.json();
+        const text = await response.text();
 
-        return new Response(JSON.stringify(data), {
+        return new Response(text, {
           status: response.status,
           headers: {
             "Content-Type": "application/json",
             ...corsHeaders
           }
         });
+
       } catch (error) {
         return new Response(
           JSON.stringify({
@@ -71,15 +75,16 @@ export default {
           }
         });
 
-        const data = await response.json();
+        const text = await response.text();
 
-        return new Response(JSON.stringify(data), {
+        return new Response(text, {
           status: response.status,
           headers: {
             "Content-Type": "application/json",
             ...corsHeaders
           }
         });
+
       } catch (error) {
         return new Response(
           JSON.stringify({
@@ -112,15 +117,16 @@ export default {
           }
         });
 
-        const data = await response.json();
+        const text = await response.text();
 
-        return new Response(JSON.stringify(data), {
+        return new Response(text, {
           status: response.status,
           headers: {
             "Content-Type": "application/json",
             ...corsHeaders
           }
         });
+
       } catch (error) {
         return new Response(
           JSON.stringify({
@@ -141,6 +147,22 @@ export default {
     // =========================
     // DEFAULT - WEBSITE FILES
     // =========================
-    return env.ASSETS.fetch(request);
+    if (env.ASSETS) {
+      return env.ASSETS.fetch(request);
+    }
+
+    return new Response(
+      JSON.stringify({
+        status: "error",
+        message: "ASSETS binding is not configured"
+      }),
+      {
+        status: 500,
+        headers: {
+          "Content-Type": "application/json",
+          ...corsHeaders
+        }
+      }
+    );
   }
 };
