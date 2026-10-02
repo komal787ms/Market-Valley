@@ -303,20 +303,20 @@ Indian Markets, Gold, Crypto & Global Economic News —
 
 <div class="card">
 <div class="card-title">NIFTY 50</div>
-<div class="price"id="niftyPrice">23555.35</div>
-<div class="green"id="niftyChange">▲ +0.72%</div>
+<div class="price"id="niftyPrice">Loading...</div>
+<div class="yellow"id="niftyChange">Fetching live data...</div>
 </div>
 
 <div class="card">
 <div class="card-title">BANK NIFTY</div>
-<div class="price"id="bankniftyPrice">57,420.80</div>
-<div class="green"id="bankNiftyChange">▲ +0.54%</div>
+<div class="price"id="bankniftyPrice">Loading...</div>
+<div class="yellow"id="bankNiftyChange">Fetching live data...</div>
 </div>
 
 <div class="card">
 <div class="card-title">SENSEX</div>
-<div class="price"id="sensexPrice">82,420.15</div>
-<div class="green"id="sensexChange">▲ +0.61%</div>
+<div class="price"id="sensexPrice">—</div>
+<div class="yellow"id="sensexChange">Live data unavailable</div>
 </div>
 
 <div class="card">
@@ -515,7 +515,9 @@ document.getElementById("newsList");
 try{
 
 const response =
-await fetch("/api/news");
+await fetch("https://market-valley.ykomal787.workers.dev/api/news?v=" + Date.now(), {
+  cache: "no-store"
+});
 
 const data =
 await response.json();
@@ -545,6 +547,18 @@ ${error.message}
 
 }
 
+}
+
+
+/* SAFE HTML ESCAPE */
+
+function escapeHTML(value){
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/\"/g, "&quot;")
+    .replace(/\'/g, "&#039;");
 }
 
 
@@ -664,12 +678,7 @@ displayNews(filtered);
 
 async function loadMarketData() {
   try {
-    const response = await fetch(
-  "https://market-valley.ykomal787.workers.dev/api/market?v=" + Date.now(),
-  {
-    cache: "no-store"
-  }
-   {
+    const response = await fetch("https://market-valley.ykomal787.workers.dev/api/market?v=" + Date.now(), {
       cache: "no-store"
     });
 
@@ -893,10 +902,9 @@ loadMarketData();
 
 // हर 30 सेकंड में नया data
 setInterval(loadMarketData, 30000);
-}
 /* START */
+
 loadNews();
-loadMarketData();
 </script>
 
 </body>
