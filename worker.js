@@ -145,6 +145,135 @@ export default {
     }
 
     // =========================
+    // LIVE GOLD - 24K INR / GRAM
+    // =========================
+    if (url.pathname === "/api/gold") {
+      const apiUrl =
+        "https://api.goldprice.dev/v1/carat?currency=INR";
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        const text = await response.text();
+
+        return new Response(text, {
+          status: response.status,
+          headers: {
+            "Content-Type": "application/json",
+            ...corsHeaders,
+            "Cache-Control": "no-store"
+          }
+        });
+
+      } catch (error) {
+        return new Response(
+          JSON.stringify({
+            status: "error",
+            message: error.message
+          }),
+          {
+            status: 500,
+            headers: {
+              "Content-Type": "application/json",
+              ...corsHeaders
+            }
+          }
+        );
+      }
+    }
+
+    // =========================
+    // LIVE INTERNATIONAL GOLD
+    // =========================
+    if (url.pathname === "/api/gold-international") {
+      const apiUrl =
+        "https://api.goldprice.dev/v1/prices?symbol=XAU-USD-SPOT";
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        const text = await response.text();
+
+        return new Response(text, {
+          status: response.status,
+          headers: {
+            "Content-Type": "application/json",
+            ...corsHeaders,
+            "Cache-Control": "no-store"
+          }
+        });
+
+      } catch (error) {
+        return new Response(
+          JSON.stringify({
+            status: "error",
+            message: error.message
+          }),
+          {
+            status: 500,
+            headers: {
+              "Content-Type": "application/json",
+              ...corsHeaders
+            }
+          }
+        );
+      }
+    }
+
+    // =========================
+    // LIVE CRYPTO
+    // =========================
+    if (url.pathname === "/api/crypto") {
+      const apiUrl =
+        "https://api.apimitra.in/crypto?coin=bitcoin,ethereum";
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json"
+          }
+        });
+
+        const text = await response.text();
+
+        return new Response(text, {
+          status: response.status,
+          headers: {
+            "Content-Type": "application/json",
+            ...corsHeaders,
+            "Cache-Control": "no-store"
+          }
+        });
+
+      } catch (error) {
+        return new Response(
+          JSON.stringify({
+            status: "error",
+            message: error.message
+          }),
+          {
+            status: 500,
+            headers: {
+              "Content-Type": "application/json",
+              ...corsHeaders
+            }
+          }
+        );
+      }
+    }
+
+    // =========================
     // DEFAULT - WEBSITE FILES
     // =========================
     if (env.ASSETS) {
