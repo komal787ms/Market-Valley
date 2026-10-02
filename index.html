@@ -676,255 +676,94 @@ displayNews(filtered);
 
 }
 
- <script>
 async function loadMarketData() {
-  try {
+  console.log("🚀 loadMarketData START");
 
-const response = await fetch(
-  "https://market-valley.ykomal787.workers.dev/api/market?v=" + Date.now(),
-  {
-    cache: "no-store"
-  }
-);    
+  try {
+    const apiUrl =
+      "https://market-valley.ykomal787.workers.dev/api/market?v=" +
+      Date.now();
+
+    console.log("📡 Fetching:", apiUrl);
+
+    const response = await fetch(apiUrl, {
+      method: "GET",
+      cache: "no-store"
+    });
+
+    console.log("📥 API STATUS:", response.status);
 
     if (!response.ok) {
-      throw new Error(
-        "Market API HTTP " + response.status
-      );
+      throw new Error("Market API HTTP " + response.status);
     }
 
     const result = await response.json();
 
-    console.log(
-      "MARKET API RESULT:",
-      result
-    );
+    console.log("✅ MARKET API RESULT:", result);
 
     const data = Array.isArray(result.data)
       ? result.data
       : [];
 
-
-    /* =========================
-       SYMBOL NORMALIZER
-    ========================= */
+    console.log("📊 MARKET DATA COUNT:", data.length);
 
     function normalizeSymbol(value) {
-
       return String(value || "")
         .trim()
         .toUpperCase()
         .replace(/[^A-Z0-9]/g, "");
-
     }
 
-
-    /* =========================
-       FIND MARKET INDICES
-    ========================= */
-
     const nifty = data.find(item => {
-
-      const symbol =
-        normalizeSymbol(item.symbol);
-
-      return (
-        symbol === "NIFTY" ||
-        symbol === "NIFTY50"
-      );
-
+      const s = normalizeSymbol(item.symbol);
+      return s === "NIFTY50" || s === "NIFTY";
     });
-
 
     const bankNifty = data.find(item => {
-
-      const symbol =
-        normalizeSymbol(item.symbol);
-
-      return (
-        symbol === "NIFTYBANK" ||
-        symbol === "BANKNIFTY"
-      );
-
+      const s = normalizeSymbol(item.symbol);
+      return s === "NIFTYBANK" || s === "BANKNIFTY";
     });
-
 
     const sensex = data.find(item => {
-
-      const symbol =
-        normalizeSymbol(item.symbol);
-
-      return (
-        symbol === "SENSEX" ||
-        symbol === "BSESENSEX"
-      );
-
+      const s = normalizeSymbol(item.symbol);
+      return s === "SENSEX" || s === "BSESENSEX";
     });
 
-
-    console.log(
-      "NIFTY:",
-      nifty
-    );
-
-    console.log(
-      "BANK NIFTY:",
-      bankNifty
-    );
-
-    console.log(
-      "SENSEX:",
-      sensex
-    );
-
-
-    /* =========================
-       FORMAT PRICE
-    ========================= */
+    console.log("🔎 NIFTY:", nifty);
+    console.log("🔎 BANK NIFTY:", bankNifty);
+    console.log("🔎 SENSEX:", sensex);
 
     function formatPrice(value) {
-
-      const number = Number(
-        String(value ?? "")
-          .replace(/,/g, "")
-      );
+      const number = Number(value);
 
       if (!Number.isFinite(number)) {
         return "—";
       }
 
-      return number.toLocaleString(
-        "en-IN",
-        {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2
-        }
-      );
-
+      return number.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
     }
-
-
-    /* =========================
-       GET DAILY CHANGE
-    ========================= */
 
     function getChange(item) {
+      if (!item) return null;
 
-      if (!item) {
-        return null;
-      }
-
-
-      let value;
-
-
-      /* Actual percentage change */
+      const ltp = Number(item.ltp);
+      const close = Number(item.close);
 
       if (
-        item.pChange !== undefined &&
-        item.pChange !== null &&
-        item.pChange !== ""
+        Number.isFinite(ltp) &&
+        Number.isFinite(close) &&
+        close !== 0
       ) {
-
-        value = item.pChange;
-
+        return ((ltp - close) / close) * 100;
       }
 
-
-      /* Alternative percentage field */
-
-      else if (
-        item.changePercent !== undefined &&
-        item.changePercent !== null &&
-        item.changePercent !== ""
-      ) {
-
-        value = item.changePercent;
-
-      }
-
-
-      /* 1 day return */
-
-      else if (
-        item.r1D !== undefined &&
-        item.r1D !== null &&
-        item.r1D !== ""
-      ) {
-
-        value = item.r1D;
-
-      }
-
-
-      /* Calculate from LTP and previous close */
-
-      else if (
-        item.ltp != null &&
-        item.close != null
-      ) {
-
-        const ltp = Number(
-          String(item.ltp)
-            .replace(/,/g, "")
-        );
-
-        const close = Number(
-          String(item.close)
-            .replace(/,/g, "")
-        );
-
-
-        if (
-          Number.isFinite(ltp) &&
-          Number.isFinite(close) &&
-          close !== 0
-        ) {
-
-          value =
-            ((ltp - close) / close) * 100;
-
-        }
-
-      }
-
-
-      if (
-        value === undefined ||
-        value === null ||
-        value === ""
-      ) {
-
-        return null;
-
-      }
-
-
-      const number = Number(
-        String(value)
-          .replace(/,/g, "")
-      );
-
-
-      if (!Number.isFinite(number)) {
-        return null;
-      }
-
-
-      return number;
-
+      return null;
     }
 
-
-    /* =========================
-       UPDATE MARKET CARD
-    ========================= */
-
-    function updateCard(
-      item,
-      priceId,
-      changeId
-    ) {
+    function updateCard(item, priceId, changeId) {
 
       const priceElement =
         document.getElementById(priceId);
@@ -932,116 +771,57 @@ const response = await fetch(
       const changeElement =
         document.getElementById(changeId);
 
+      if (!priceElement || !changeElement) {
+        console.error(
+          "❌ Card element missing:",
+          priceId,
+          changeId
+        );
+        return;
+      }
 
       if (!item) {
-
-        console.warn(
-          "Market symbol not found:",
-          priceId
-        );
-
-        if (priceElement) {
-          priceElement.textContent = "—";
-        }
-
-        if (changeElement) {
-          changeElement.textContent =
-            "Live data unavailable";
-
-          changeElement.classList.remove(
-            "green",
-            "red"
-          );
-        }
-
+        priceElement.textContent = "—";
+        changeElement.textContent =
+          "Live data unavailable";
         return;
-
       }
 
+      priceElement.textContent =
+        formatPrice(item.ltp);
 
-      /* PRICE */
+      const change = getChange(item);
 
-      if (priceElement) {
-
-        priceElement.textContent =
-          formatPrice(item.ltp);
-
+      if (change === null) {
+        changeElement.textContent = "—";
+        return;
       }
 
+      const arrow =
+        change >= 0 ? "▲" : "▼";
 
-      /* CHANGE */
+      const sign =
+        change >= 0 ? "+" : "";
 
-      if (changeElement) {
+      changeElement.textContent =
+        arrow +
+        " " +
+        sign +
+        change.toFixed(2) +
+        "%";
 
-        const change =
-          getChange(item);
+      changeElement.classList.remove(
+        "green",
+        "red",
+        "yellow"
+      );
 
-
-        if (change === null) {
-
-          changeElement.textContent =
-            "—";
-
-          changeElement.classList.remove(
-            "green",
-            "red"
-          );
-
-        }
-
-        else {
-
-          const arrow =
-            change >= 0
-              ? "▲"
-              : "▼";
-
-          const sign =
-            change >= 0
-              ? "+"
-              : "";
-
-
-          changeElement.textContent =
-            arrow +
-            " " +
-            sign +
-            change.toFixed(2) +
-            "%";
-
-
-          changeElement.classList.remove(
-            "green",
-            "red"
-          );
-
-
-          if (change >= 0) {
-
-            changeElement.classList.add(
-              "green"
-            );
-
-          }
-
-          else {
-
-            changeElement.classList.add(
-              "red"
-            );
-
-          }
-
-        }
-
+      if (change >= 0) {
+        changeElement.classList.add("green");
+      } else {
+        changeElement.classList.add("red");
       }
-
     }
-
-
-    /* =========================
-       UPDATE ALL THREE CARDS
-    ========================= */
 
     updateCard(
       nifty,
@@ -1049,13 +829,11 @@ const response = await fetch(
       "niftyChange"
     );
 
-
     updateCard(
       bankNifty,
-      "bankNiftyPrice",
+      "bankniftyPrice",
       "bankNiftyChange"
     );
-
 
     updateCard(
       sensex,
@@ -1063,40 +841,29 @@ const response = await fetch(
       "sensexChange"
     );
 
+    console.log("🎉 MARKET CARDS UPDATED");
 
-    console.log(
-      "✅ MARKET CARDS UPDATED"
-    );
-
-
-  }
-
-  catch (error) {
+  } catch (error) {
 
     console.error(
-      "❌ Market data error:",
+      "❌ MARKET DATA ERROR:",
       error
     );
-
   }
-
 }
 
 
-/* =========================
-   FIRST LOAD
-========================= */
+/* FIRST LOAD */
 
 loadMarketData();
 
 
-/* =========================
-   REFRESH EVERY 30 SECONDS
-========================= */
+/* REFRESH EVERY 30 SECONDS */
 
 setInterval(
   loadMarketData,
   30000
-);
+); 
+</script>
 </body>
 </html>
