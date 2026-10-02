@@ -339,21 +339,21 @@ Indian Markets, Gold, Crypto & Global Economic News —
 <div class="market-grid">
 
 <div class="card">
-<div class="card-title">Gold 24K</div>
-<div class="price yellow">₹1,02,500</div>
-<div class="green">▲ +0.43%</div>
+  <div class="card-title">Gold 24K</div>
+  <div class="price yellow" id="gold24Price">Loading...</div>
+  <div class="green" id="gold24Change">Live data...</div>
 </div>
 
 <div class="card">
-<div class="card-title">International Gold</div>
-<div class="price">$3,345</div>
-<div class="green">▲ +0.31%</div>
+  <div class="card-title">International Gold</div>
+  <div class="price" id="internationalGoldPrice">Loading...</div>
+  <div class="green">XAU / USD Spot</div>
 </div>
 
 <div class="card">
-<div class="card-title">US Dollar</div>
-<div class="price">₹87.20</div>
-<div class="red">▼ -0.18%</div>
+  <div class="card-title">US Dollar</div>
+  <div class="price">₹87.20</div>
+  <div class="red">▼ -0.18%</div>
 </div>
 
 </div>
@@ -370,15 +370,16 @@ Indian Markets, Gold, Crypto & Global Economic News —
 <div class="market-grid">
 
 <div class="card">
-<div class="card-title">Bitcoin</div>
-<div class="price">₿ $118,450</div>
-<div class="green">▲ +2.10%</div>
+  <div class="card-title">Bitcoin</div>
+  <div class="price" id="bitcoinPrice">Loading...</div>
+  <div id="bitcoinChange">Live data...</div>
 </div>
 
 <div class="card">
-<div class="card-title">Ethereum</div>
-<div class="price">Ξ $3,820</div>
-<div class="green">▲ +1.65%</div>
+  <div class="card-title">Ethereum</div>
+  <div class="price" id="ethereumPrice">Loading...</div>
+  <div id="ethereumChange">Live data...</div>
+</div>
 </div>
 
 </div>
@@ -863,7 +864,252 @@ loadMarketData();
 setInterval(
   loadMarketData,
   30000
-); 
+);
+/* =========================
+   LIVE GOLD
+========================= */
+
+async function loadGoldData() {
+  try {
+    const response = await fetch(
+      "https://market-valley.ykomal787.workers.dev/api/gold?v=" +
+      Date.now(),
+      {
+        cache: "no-store"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Gold API HTTP " + response.status);
+    }
+
+    const data = await response.json();
+
+    const gold24 = Number(data.price_gram_24k);
+
+    if (Number.isFinite(gold24)) {
+      document.getElementById("gold24Price").textContent =
+        "₹" +
+        gold24.toLocaleString("en-IN", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+    }
+
+    document.getElementById("gold24Change").textContent =
+      "Live • ₹/gram";
+
+    console.log("✅ GOLD:", data);
+
+  } catch (error) {
+    console.error("❌ GOLD ERROR:", error);
+
+    document.getElementById("gold24Price").textContent =
+      "Unavailable";
+
+    document.getElementById("gold24Change").textContent =
+      "Live data unavailable";
+  }
+}
+
+
+/* =========================
+   LIVE INTERNATIONAL GOLD
+========================= */
+
+async function loadInternationalGold() {
+  try {
+    const response = await fetch(
+      "https://market-valley.ykomal787.workers.dev/api/gold-international?v=" +
+      Date.now(),
+      {
+        cache: "no-store"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "International Gold API HTTP " +
+        response.status
+      );
+    }
+
+    const result = await response.json();
+
+    const item =
+      Array.isArray(result.symbols)
+        ? result.symbols[0]
+        : null;
+
+    const price = Number(item?.price);
+
+    if (Number.isFinite(price)) {
+      document.getElementById(
+        "internationalGoldPrice"
+      ).textContent =
+        "$" +
+        price.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
+    }
+
+    console.log(
+      "✅ INTERNATIONAL GOLD:",
+      result
+    );
+
+  } catch (error) {
+    console.error(
+      "❌ INTERNATIONAL GOLD ERROR:",
+      error
+    );
+
+    document.getElementById(
+      "internationalGoldPrice"
+    ).textContent = "Unavailable";
+  }
+}
+
+
+/* =========================
+   LIVE CRYPTO
+========================= */
+
+async function loadCryptoData() {
+  try {
+    const response = await fetch(
+      "https://market-valley.ykomal787.workers.dev/api/crypto?v=" +
+      Date.now(),
+      {
+        cache: "no-store"
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Crypto API HTTP " +
+        response.status
+      );
+    }
+
+    const result = await response.json();
+
+    const data = result.data || {};
+
+    function updateCrypto(
+      coin,
+      priceId,
+      changeId
+    ) {
+      const item = data[coin];
+
+      if (!item) {
+        document.getElementById(
+          priceId
+        ).textContent = "Unavailable";
+
+        return;
+      }
+
+      const price = Number(item.inr);
+      const change = Number(
+        item.inr_24h_change
+      );
+
+      if (Number.isFinite(price)) {
+        document.getElementById(
+          priceId
+        ).textContent =
+          "₹" +
+          price.toLocaleString("en-IN", {
+            maximumFractionDigits: 0
+          });
+      }
+
+      if (Number.isFinite(change)) {
+        const element =
+          document.getElementById(changeId);
+
+        const arrow =
+          change >= 0 ? "▲" : "▼";
+
+        const sign =
+          change >= 0 ? "+" : "";
+
+        element.textContent =
+          arrow +
+          " " +
+          sign +
+          change.toFixed(2) +
+          "%";
+
+        element.classList.remove(
+          "green",
+          "red"
+        );
+
+        element.classList.add(
+          change >= 0
+            ? "green"
+            : "red"
+        );
+      }
+    }
+
+    updateCrypto(
+      "bitcoin",
+      "bitcoinPrice",
+      "bitcoinChange"
+    );
+
+    updateCrypto(
+      "ethereum",
+      "ethereumPrice",
+      "ethereumChange"
+    );
+
+    console.log(
+      "✅ CRYPTO:",
+      result
+    );
+
+  } catch (error) {
+    console.error(
+      "❌ CRYPTO ERROR:",
+      error
+    );
+  }
+}
+
+
+/* =========================
+   FIRST LOAD
+========================= */
+
+loadGoldData();
+loadInternationalGold();
+loadCryptoData();
+
+
+/* =========================
+   REFRESH
+========================= */
+
+setInterval(
+  loadGoldData,
+  60000
+);
+
+setInterval(
+  loadInternationalGold,
+  60000
+);
+
+setInterval(
+  loadCryptoData,
+  30000
+);  
 </script>
 </body>
 </html>
