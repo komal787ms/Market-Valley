@@ -664,7 +664,12 @@ displayNews(filtered);
 
 async function loadMarketData() {
   try {
-    const response = await fetch("/api/market?v=" + Date.now(), {
+    const response = await fetch(
+  "https://market-valley.ykomal787.workers.dev/api/market?v=" + Date.now(),
+  {
+    cache: "no-store"
+  }
+   {
       cache: "no-store"
     });
 
