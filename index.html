@@ -3,523 +3,749 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MARKET-VALLEY // Next-Gen Financial Terminal</title>
 
-<title>Market-Valley | Stock Market, Gold & Crypto Intelligence</title>
+<!-- Modern Futuristic Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
 <style>
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial,Helvetica,sans-serif;
+:root {
+  --bg-dark: #030712;
+  --card-bg: rgba(17, 24, 39, 0.65);
+  --card-border: rgba(56, 189, 248, 0.18);
+  --accent-gold: #fbbf24;
+  --accent-cyan: #38bdf8;
+  --accent-purple: #818cf8;
+  --neon-green: #10b981;
+  --neon-red: #f43f5e;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
 }
 
-html{
-  scroll-behavior:smooth;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-body{
-  background:#07111f;
-  color:#fff;
+html {
+  scroll-behavior: smooth;
 }
 
-header{
-  background:#0b1728;
-  padding:16px;
-  border-bottom:1px solid #22334a;
-  position:sticky;
-  top:0;
-  z-index:100;
+body {
+  background-color: var(--bg-dark);
+  background-image: 
+    radial-gradient(circle at 15% 10%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+    radial-gradient(circle at 85% 30%, rgba(129, 140, 248, 0.08) 0%, transparent 40%);
+  color: var(--text-main);
+  min-height: 100vh;
 }
 
-.header-top{
-  max-width:1100px;
-  margin:auto;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+/* Top Marquee Ticker */
+.ticker-wrap {
+  background: rgba(2, 6, 23, 0.95);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+  padding: 8px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
 }
 
-.logo{
-  font-size:24px;
-  font-weight:800;
-  color:#ffd54a;
+.ticker-move {
+  display: inline-block;
+  animation: tickerScroll 28s linear infinite;
 }
 
-.tagline{
-  color:#9fb0c7;
-  font-size:12px;
-  margin-top:2px;
+.ticker-item {
+  display: inline-block;
+  margin-right: 40px;
+  color: #cbd5e1;
 }
 
-.lang-btn{
-  background:#ffd54a;
-  color:#07111f;
-  border:none;
-  padding:8px 14px;
-  border-radius:8px;
-  font-weight:700;
-  font-size:12px;
-  cursor:pointer;
+.ticker-item b {
+  color: var(--accent-cyan);
 }
 
-.lang-btn:hover{
-  background:#ffdf73;
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
-nav{
-  max-width:1100px;
-  margin:14px auto 0;
-  display:flex;
-  gap:8px;
-  overflow-x:auto;
+/* Glass Header */
+header {
+  background: rgba(3, 7, 18, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-nav button{
-  background:#14243a;
-  color:#fff;
-  border:1px solid #29405e;
-  padding:8px 14px;
-  border-radius:20px;
-  white-space:nowrap;
-  cursor:pointer;
-  font-size:13px;
+.header-inner {
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
 }
 
-nav button:hover{
-  background:#1d3452;
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.hero{
-  padding:24px 16px;
-  background:linear-gradient(135deg,#0b1d35,#07111f);
-  border-bottom:1px solid #16263d;
+.logo {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  background: linear-gradient(90deg, #fbbf24, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:16px;
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: var(--neon-green);
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
-.hero h1{
-  font-size:28px;
-  margin-bottom:6px;
+.pulse-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--neon-green);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--neon-green);
+  animation: pulse 1.5s infinite;
 }
 
-.hero p{
-  color:#aebed2;
-  line-height:1.5;
-  font-size:14px;
+@keyframes pulse {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.3); }
+  100% { opacity: 1; transform: scale(1); }
 }
 
-.section-title{
-  font-size:20px;
-  margin:24px 0 14px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+nav {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
 }
 
-.market-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-  gap:12px;
+nav button {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
 }
 
-.card{
-  background:#0e1c2e;
-  border:1px solid #213650;
-  border-radius:14px;
-  padding:16px;
+nav button:hover {
+  background: rgba(56, 189, 248, 0.15);
+  color: #fff;
+  border-color: var(--accent-cyan);
 }
 
-.card-title{
-  color:#aebed2;
-  font-size:13px;
+.lang-btn {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #030712;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 800;
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.25);
+  transition: transform 0.2s ease;
 }
 
-.price{
-  font-size:21px;
-  font-weight:700;
-  margin:9px 0;
+.lang-btn:hover {
+  transform: translateY(-1px);
 }
 
-.green{
-  color:#38e08f;
+/* Container & Hero */
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
 }
 
-.red{
-  color:#ff6374;
+.hero {
+  padding: 36px 20px 20px;
+  text-align: center;
 }
 
-.yellow{
-  color:#ffd54a;
+.hero-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--accent-cyan);
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  padding: 5px 14px;
+  border-radius: 99px;
+  margin-bottom: 14px;
 }
 
-/* Chart Box */
-.chart-box{
-  background:#0e1c2e;
-  border:1px solid #213650;
-  border-radius:14px;
-  padding:16px;
-  margin-top:16px;
+.hero h1 {
+  font-size: clamp(28px, 5vw, 44px);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 12px;
+  background: linear-gradient(to right, #ffffff, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-.chart-tabs{
-  display:flex;
-  gap:8px;
-  margin-bottom:12px;
-  flex-wrap:wrap;
+.hero p {
+  color: var(--text-muted);
+  max-width: 650px;
+  margin: auto;
+  font-size: 15px;
+  line-height: 1.6;
 }
 
-.chart-tabs button{
-  background:#14243a;
-  color:#fff;
-  border:1px solid #29405e;
-  padding:6px 12px;
-  border-radius:6px;
-  cursor:pointer;
-  font-size:12px;
+/* Section Headers */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 32px 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.chart-tabs button.active, .chart-tabs button:hover{
-  background:#ffd54a;
-  color:#07111f;
-  font-weight:700;
+.section-title {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-#tv_chart_container{
-  height:360px;
-  width:100%;
+/* Futuristic Cards */
+.market-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
 }
 
-.search{
-  width:100%;
-  padding:14px;
-  border-radius:10px;
-  border:1px solid #29405e;
-  background:#0e1c2e;
-  color:#fff;
-  margin-bottom:15px;
-  outline:none;
+.card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-.news{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  opacity: 0.5;
 }
 
-.news-card{
-  background:#0e1c2e;
-  border:1px solid #213650;
-  border-radius:14px;
-  padding:16px;
+.card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 10px 30px -10px rgba(56, 189, 248, 0.25);
 }
 
-.news-source{
-  color:#ffd54a;
-  font-size:12px;
-  margin-bottom:7px;
+.card-title {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
 }
 
-.news-card h3{
-  font-size:17px;
-  line-height:1.4;
-  margin-bottom:8px;
+.price {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 10px 0 6px;
+  color: #fff;
 }
 
-.news-card p{
-  color:#b5c2d1;
-  line-height:1.5;
-  font-size:14px;
+.badge-change {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
 }
 
-.news-card a{
-  display:inline-block;
-  margin-top:12px;
-  color:#7fc3ff;
-  text-decoration:none;
-  font-size:13px;
-  font-weight:bold;
+.green {
+  color: var(--neon-green);
+  background: rgba(16, 185, 129, 0.12);
 }
 
-.news-card a:hover{
-  text-decoration:underline;
+.red {
+  color: var(--neon-red);
+  background: rgba(244, 63, 94, 0.12);
 }
 
-.impact{
-  margin-top:12px;
-  padding:9px;
-  border-radius:8px;
-  background:#13263b;
-  font-size:12px;
-  color:#d9e5f2;
+.yellow {
+  color: var(--accent-gold);
+  background: rgba(251, 191, 36, 0.12);
 }
 
-.loading{
-  text-align:center;
-  padding:25px;
-  color:#9fb0c7;
+/* Interactive Chart Container */
+.chart-box {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 18px;
 }
 
-.error{
-  background:#32151b;
-  border:1px solid #74313b;
-  padding:15px;
-  border-radius:10px;
-  color:#ff9da8;
+.chart-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
 }
 
-.calendar{
-  overflow-x:auto;
+.chart-tabs button {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  transition: all 0.2s;
 }
 
-table{
-  width:100%;
-  min-width:650px;
-  border-collapse:collapse;
-  background:#0e1c2e;
+.chart-tabs button.active, .chart-tabs button:hover {
+  background: var(--accent-cyan);
+  color: #030712;
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.4);
 }
 
-th,td{
-  padding:13px 10px;
-  border-bottom:1px solid #213650;
-  text-align:left;
-  font-size:13px;
+#tv_chart_container {
+  height: 400px;
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-th{
-  color:#ffd54a;
-  background:#13243a;
+/* Search Input */
+.search {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  background: rgba(15, 23, 42, 0.8);
+  color: #fff;
+  font-size: 14px;
+  margin-bottom: 18px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-footer{
-  margin-top:35px;
-  padding:28px 16px;
-  text-align:center;
-  color:#8799ae;
-  background:#050d18;
-  font-size:12px;
+.search:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
 }
 
-.disclaimer{
-  margin-top:10px;
-  color:#687b91;
+/* News Grid */
+.news {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
 }
 
-.status{
-  margin-top:8px;
-  font-size:12px;
-  color:#38e08f;
+.news-card {
+  background: var(--card-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.25s ease;
+}
+
+.news-card:hover {
+  border-color: rgba(251, 191, 36, 0.4);
+  transform: translateY(-3px);
+}
+
+.news-source {
+  color: var(--accent-gold);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.news-card h3 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+  margin-bottom: 10px;
+  color: #f1f5f9;
+}
+
+.news-card p {
+  color: var(--text-muted);
+  line-height: 1.55;
+  font-size: 13px;
+}
+
+.impact {
+  margin-top: 14px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.08);
+  border-left: 3px solid var(--accent-cyan);
+  font-size: 12px;
+  color: #e2e8f0;
+}
+
+.news-card a {
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.news-card a:hover {
+  text-decoration: underline;
+}
+
+/* Futuristic Table */
+.calendar {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 650px;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 15px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: left;
+  font-size: 13px;
+}
+
+th {
+  color: var(--accent-cyan);
+  background: rgba(2, 6, 23, 0.6);
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+footer {
+  margin-top: 50px;
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--text-muted);
+  background: #020617;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 12px;
+}
+
+.disclaimer {
+  margin-top: 10px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  color: #64748b;
+}
+
+.loading {
+  text-align: center;
+  padding: 30px;
+  color: var(--text-muted);
+  grid-column: 1 / -1;
 }
 </style>
 </head>
 
 <body>
 
+<!-- Top Scrolling Live Ticker -->
+<div class="ticker-wrap">
+  <div class="ticker-move" id="topTicker">
+    <span class="ticker-item">● <b>MARKET-VALLEY TERMINAL</b> LIVE FEED</span>
+    <span class="ticker-item">🇮🇳 <b>NIFTY 50:</b> <span id="tickNifty">Loading...</span></span>
+    <span class="ticker-item">🏦 <b>BANK NIFTY:</b> <span id="tickBank">Loading...</span></span>
+    <span class="ticker-item">🥇 <b>GOLD (24K):</b> <span id="tickGold">Loading...</span></span>
+    <span class="ticker-item">₿ <b>BITCOIN:</b> <span id="tickBtc">Loading...</span></span>
+    <span class="ticker-item">⚡ <b>ETHEREUM:</b> <span id="tickEth">Loading...</span></span>
+    <span class="ticker-item">☀️ <b>SOLANA:</b> <span id="tickSol">Loading...</span></span>
+    <!-- Duplicate for seamless loop -->
+    <span class="ticker-item">● <b>MARKET-VALLEY TERMINAL</b> LIVE FEED</span>
+    <span class="ticker-item">🇮🇳 <b>NIFTY 50:</b> <span id="tickNifty2">Loading...</span></span>
+    <span class="ticker-item">🥇 <b>GOLD (24K):</b> <span id="tickGold2">Loading...</span></span>
+    <span class="ticker-item">₿ <b>BITCOIN:</b> <span id="tickBtc2">Loading...</span></span>
+  </div>
+</div>
+
+<!-- Glass Header -->
 <header>
-  <div class="header-top">
-    <div>
-      <div class="logo">MARKET-VALLEY 📈</div>
-      <div class="tagline" id="taglineText">Smart Market Intelligence • Hindi + English</div>
+  <div class="header-inner">
+    <div class="brand">
+      <div class="logo">MARKET-VALLEY</div>
+      <div class="live-badge"><span class="pulse-dot"></span> LIVE TERMINAL</div>
     </div>
+
+    <nav>
+      <button onclick="showSection('markets')">Markets</button>
+      <button onclick="showSection('charts')">Charts</button>
+      <button onclick="showSection('gold')">Gold</button>
+      <button onclick="showSection('crypto')">Crypto</button>
+      <button onclick="showSection('news')">News</button>
+      <button onclick="showSection('calendar')">US Fed</button>
+    </nav>
+
     <button class="lang-btn" id="langBtn" onclick="toggleLang()">हिंदी में देखें</button>
   </div>
-
-  <nav>
-    <button onclick="showSection('markets')" id="navMarkets">Markets</button>
-    <button onclick="showSection('charts')" id="navCharts">Live Charts</button>
-    <button onclick="showSection('gold')" id="navGold">Gold</button>
-    <button onclick="showSection('crypto')" id="navCrypto">Crypto</button>
-    <button onclick="showSection('news')" id="navNews">News</button>
-    <button onclick="showSection('calendar')" id="navCalendar">US Fed & Calendar</button>
-  </nav>
 </header>
 
+<!-- Hero Section -->
 <section class="hero">
-  <div class="container">
-    <h1 id="heroTitle">Market-Valley</h1>
-    <p id="heroSub">Indian Markets, Gold, Crypto & Global Economic News — सब कुछ एक जगह।</p>
-    <div class="status">● All Live Feeds Active</div>
-  </div>
+  <div class="hero-tag">AI-Powered Market Intelligence • Hindi + English</div>
+  <h1 id="heroTitle">Next-Gen Market & Macro Terminal</h1>
+  <p id="heroSub">Track Indian Equities, Live Gold, Crypto & US Federal Reserve events impacting global liquidity — सब कुछ एक जगह।</p>
 </section>
 
 <main class="container">
 
-<!-- MARKETS -->
-<section id="markets">
-  <h2 class="section-title" id="titleMarkets">📊 Indian Markets</h2>
-  <div class="market-grid">
-    <div class="card">
-      <div class="card-title">NIFTY 50</div>
-      <div class="price" id="niftyPrice">Loading...</div>
-      <div class="yellow" id="niftyChange">Fetching...</div>
+  <!-- INDIAN MARKETS -->
+  <section id="markets">
+    <div class="section-header">
+      <h2 class="section-title" id="titleMarkets">📊 Indian Markets</h2>
     </div>
-    <div class="card">
-      <div class="card-title">BANK NIFTY</div>
-      <div class="price" id="bankniftyPrice">Loading...</div>
-      <div class="yellow" id="bankNiftyChange">Fetching...</div>
+    <div class="market-grid">
+      <div class="card">
+        <div class="card-title">NIFTY 50</div>
+        <div class="price" id="niftyPrice">Loading...</div>
+        <span class="badge-change yellow" id="niftyChange">Fetching...</span>
+      </div>
+      <div class="card">
+        <div class="card-title">BANK NIFTY</div>
+        <div class="price" id="bankniftyPrice">Loading...</div>
+        <span class="badge-change yellow" id="bankNiftyChange">Fetching...</span>
+      </div>
+      <div class="card">
+        <div class="card-title" id="thirdIndexTitle">NIFTY NEXT 50</div>
+        <div class="price" id="thirdIndexPrice">Loading...</div>
+        <span class="badge-change yellow" id="thirdIndexChange">Fetching...</span>
+      </div>
+      <div class="card">
+        <div class="card-title">USD / INR (Forex)</div>
+        <div class="price" id="usdPrice">Loading...</div>
+        <span class="badge-change green" id="usdChange">Live Spot</span>
+      </div>
     </div>
-    <div class="card">
-      <div class="card-title" id="thirdIndexTitle">NIFTY NEXT 50</div>
-      <div class="price" id="thirdIndexPrice">Loading...</div>
-      <div class="yellow" id="thirdIndexChange">Fetching...</div>
-    </div>
-    <div class="card">
-      <div class="card-title">USD / INR (Live)</div>
-      <div class="price" id="usdPrice">Loading...</div>
-      <div class="green" id="usdChange">Forex Spot</div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- LIVE CHARTS (Includes SENSEX!) -->
-<section id="charts">
-  <h2 class="section-title" id="titleCharts">📉 Interactive Live Charts (Sensex, Gold, Crypto)</h2>
-  <div class="chart-box">
-    <div class="chart-tabs">
-      <button class="active" onclick="loadChart('BSE:SENSEX', this)">BSE SENSEX</button>
-      <button onclick="loadChart('TVC:GOLD', this)">GOLD (XAU)</button>
-      <button onclick="loadChart('BINANCE:BTCUSDT', this)">BITCOIN</button>
-      <button onclick="loadChart('BINANCE:ETHUSDT', this)">ETHEREUM</button>
-      <button onclick="loadChart('BINANCE:SOLUSDT', this)">SOLANA</button>
+  <!-- INTERACTIVE CHARTS -->
+  <section id="charts">
+    <div class="section-header">
+      <h2 class="section-title" id="titleCharts">📉 Live Pro Charts (Sensex, Gold, Crypto)</h2>
     </div>
-    <div id="tv_chart_container"></div>
-  </div>
-</section>
+    <div class="chart-box">
+      <div class="chart-tabs">
+        <button class="active" onclick="loadChart('BSE:SENSEX', this)">BSE SENSEX</button>
+        <button onclick="loadChart('TVC:GOLD', this)">GOLD (XAU/USD)</button>
+        <button onclick="loadChart('BINANCE:BTCUSDT', this)">BITCOIN</button>
+        <button onclick="loadChart('BINANCE:ETHUSDT', this)">ETHEREUM</button>
+        <button onclick="loadChart('BINANCE:SOLUSDT', this)">SOLANA</button>
+      </div>
+      <div id="tv_chart_container"></div>
+    </div>
+  </section>
 
-<!-- GOLD -->
-<section id="gold">
-  <h2 class="section-title" id="titleGold">🪙 Gold Market (Live)</h2>
-  <div class="market-grid">
-    <div class="card">
-      <div class="card-title">Gold 24K (10g India Est.)</div>
-      <div class="price yellow" id="gold24Price">Loading...</div>
-      <div class="green" id="gold24Change">Fetching live...</div>
+  <!-- GOLD MARKET -->
+  <section id="gold">
+    <div class="section-header">
+      <h2 class="section-title" id="titleGold">🪙 Bullion & Gold Market</h2>
     </div>
-    <div class="card">
-      <div class="card-title">International Gold (1 oz)</div>
-      <div class="price" id="internationalGoldPrice">Loading...</div>
-      <div class="green" id="internationalGoldChange">XAU / USD Live</div>
+    <div class="market-grid">
+      <div class="card">
+        <div class="card-title">Gold 24K (10g India Est.)</div>
+        <div class="price" id="gold24Price">Loading...</div>
+        <span class="badge-change yellow" id="gold24Change">Calculating...</span>
+      </div>
+      <div class="card">
+        <div class="card-title">International Gold (1 oz)</div>
+        <div class="price" id="internationalGoldPrice">Loading...</div>
+        <span class="badge-change green" id="internationalGoldChange">XAU / USD</span>
+      </div>
+      <div class="card">
+        <div class="card-title">Gold 22K (10g Jewelry Est.)</div>
+        <div class="price" id="gold22Price">Loading...</div>
+        <span class="badge-change yellow">916 Hallmark Est.</span>
+      </div>
     </div>
-    <div class="card">
-      <div class="card-title">Gold 22K (10g Jewelry Est.)</div>
-      <div class="price yellow" id="gold22Price">Loading...</div>
-      <div class="green">916 Hallmark Est.</div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- CRYPTO -->
-<section id="crypto">
-  <h2 class="section-title" id="titleCrypto">₿ Crypto Market</h2>
-  <div class="market-grid">
-    <div class="card">
-      <div class="card-title">Bitcoin (BTC)</div>
-      <div class="price" id="bitcoinPrice">Loading...</div>
-      <div id="bitcoinChange" class="yellow">Live data...</div>
+  <!-- CRYPTO MARKET -->
+  <section id="crypto">
+    <div class="section-header">
+      <h2 class="section-title" id="titleCrypto">₿ Digital Assets & Crypto</h2>
     </div>
-    <div class="card">
-      <div class="card-title">Ethereum (ETH)</div>
-      <div class="price" id="ethereumPrice">Loading...</div>
-      <div id="ethereumChange" class="yellow">Live data...</div>
+    <div class="market-grid">
+      <div class="card">
+        <div class="card-title">Bitcoin (BTC)</div>
+        <div class="price" id="bitcoinPrice">Loading...</div>
+        <span id="bitcoinChange" class="badge-change yellow">Fetching...</span>
+      </div>
+      <div class="card">
+        <div class="card-title">Ethereum (ETH)</div>
+        <div class="price" id="ethereumPrice">Loading...</div>
+        <span id="ethereumChange" class="badge-change yellow">Fetching...</span>
+      </div>
+      <div class="card">
+        <div class="card-title">Solana (SOL)</div>
+        <div class="price" id="solanaPrice">Loading...</div>
+        <span id="solanaChange" class="badge-change yellow">Fetching...</span>
+      </div>
     </div>
-    <div class="card">
-      <div class="card-title">Solana (SOL)</div>
-      <div class="price" id="solanaPrice">Loading...</div>
-      <div id="solanaChange" class="yellow">Live data...</div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- NEWS -->
-<section id="news">
-  <h2 class="section-title" id="titleNews">📰 Latest Market & Business News</h2>
-  <input id="searchBox" class="search" type="text" placeholder="Search stock, gold, crypto, Fed news / खबर खोजें..." oninput="searchNews()">
-  <div id="newsList" class="news">
-    <div class="loading">⏳ Loading filtered market news...</div>
-  </div>
-</section>
+  <!-- NEWS -->
+  <section id="news">
+    <div class="section-header">
+      <h2 class="section-title" id="titleNews">📰 Market Intelligence Feed</h2>
+    </div>
+    <input id="searchBox" class="search" type="text" placeholder="🔍 Search Nifty, Gold, Bitcoin, Fed news / खबर खोजें..." oninput="searchNews()">
+    <div id="newsList" class="news">
+      <div class="loading">⏳ Syncing real-time financial intelligence...</div>
+    </div>
+  </section>
 
-<!-- CALENDAR -->
-<section id="calendar">
-  <h2 class="section-title" id="titleCalendar">📅 US Fed & Global Economic Calendar</h2>
-  <div class="calendar">
-    <table>
-      <thead>
-        <tr>
-          <th>Event / बैठक</th>
-          <th>Country</th>
-          <th>Importance</th>
-          <th>Impact on Stocks, Gold & BTC</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>US FOMC / Federal Reserve Meeting</strong></td>
-          <td>🇺🇸 USA</td>
-          <td>🔴 High</td>
-          <td>Interest rate cuts boost Nifty, Gold & Bitcoin; hikes put pressure.</td>
-        </tr>
-        <tr>
-          <td><strong>US CPI (Inflation Data)</strong></td>
-          <td>🇺🇸 USA</td>
-          <td>🔴 High</td>
-          <td>Lower inflation weakens USD and triggers rally in Gold & Crypto.</td>
-        </tr>
-        <tr>
-          <td><strong>US Non-Farm Payrolls (Jobs Data)</strong></td>
-          <td>🇺🇸 USA</td>
-          <td>🔴 High</td>
-          <td>Strong job growth delays rate cuts; affects FII flow in India.</td>
-        </tr>
-        <tr>
-          <td><strong>RBI Monetary Policy (MPC)</strong></td>
-          <td>🇮🇳 India</td>
-          <td>🔴 High</td>
-          <td>Directly moves Bank Nifty, Nifty 50, and Rupee (USD/INR).</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</section>
+  <!-- US FED & MACRO CALENDAR -->
+  <section id="calendar">
+    <div class="section-header">
+      <h2 class="section-title" id="titleCalendar">📅 US Fed & Global Macro Tracker</h2>
+    </div>
+    <div class="calendar">
+      <table>
+        <thead>
+          <tr>
+            <th>Event / बैठक</th>
+            <th>Region</th>
+            <th>Impact Level</th>
+            <th>Effect on Nifty, Gold & Bitcoin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>US FOMC / Federal Reserve Meeting</strong></td>
+            <td>🇺🇸 USA</td>
+            <td><span class="badge-change red">HIGH IMPACT</span></td>
+            <td>Rate cuts spark rallies in Nifty, Gold & BTC; rate hikes tighten global liquidity.</td>
+          </tr>
+          <tr>
+            <td><strong>US CPI (Consumer Inflation Data)</strong></td>
+            <td>🇺🇸 USA</td>
+            <td><span class="badge-change red">HIGH IMPACT</span></td>
+            <td>Cooling inflation weakens US Dollar and boosts Gold & Crypto prices.</td>
+          </tr>
+          <tr>
+            <td><strong>US Non-Farm Payrolls (Jobs Report)</strong></td>
+            <td>🇺🇸 USA</td>
+            <td><span class="badge-change yellow">MODERATE-HIGH</span></td>
+            <td>Strong job numbers delay Fed rate cuts; directly influences FII flows in India.</td>
+          </tr>
+          <tr>
+            <td><strong>RBI Monetary Policy (MPC)</strong></td>
+            <td>🇮🇳 India</td>
+            <td><span class="badge-change red">HIGH IMPACT</span></td>
+            <td>Repo rate decisions drive Bank Nifty, Nifty 50, and USD/INR movement.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
 </main>
 
 <footer>
-  <strong>MARKET-VALLEY 📈</strong>
-  <div class="disclaimer">Educational information only. This website does not provide financial or investment advice.</div>
+  <strong style="color:#fff; letter-spacing:1px;">MARKET-VALLEY // TERMINAL</strong>
+  <div class="disclaimer">Educational & informational purposes only. Market-Valley is not a SEBI registered advisor. Consult a certified financial planner before investing.</div>
 </footer>
 
 <script>
 let currentLang = "en";
 
-// Bilingual Toggle Function
 function toggleLang() {
   currentLang = currentLang === "en" ? "hi" : "en";
   const btn = document.getElementById("langBtn");
 
   if (currentLang === "hi") {
     btn.textContent = "Switch to English";
-    document.getElementById("heroSub").textContent = "भारतीय शेयर बाजार, सोना (Gold), क्रिप्टो और अमेरिकी फेड (US Fed) की ताज़ा खबरें — सब कुछ एक जगह।";
+    document.getElementById("heroTitle").textContent = "नेक्स्ट-जेन मार्केट और मैक्रो टर्मिनल";
+    document.getElementById("heroSub").textContent = "भारतीय शेयर बाजार, लाइव गोल्ड, क्रिप्टो और अमेरिकी फेड (US Fed) की बैठकों का सीधा विश्लेषण — सब कुछ एक जगह।";
     document.getElementById("titleMarkets").textContent = "📊 भारतीय शेयर बाजार (Indian Markets)";
-    document.getElementById("titleCharts").textContent = "📉 लाइव चार्ट्स (सेंसेक्स, गोल्ड, क्रिप्टो)";
+    document.getElementById("titleCharts").textContent = "📉 लाइव प्रो चार्ट्स (सेंसेक्स, गोल्ड, क्रिप्टो)";
     document.getElementById("titleGold").textContent = "🪙 सोने का ताज़ा भाव (Gold Market)";
-    document.getElementById("titleCrypto").textContent = "₿ क्रिप्टो मार्केट (Crypto Market)";
-    document.getElementById("titleNews").textContent = "📰 शेयर बाजार और बिज़नेस की बड़ी खबरें";
+    document.getElementById("titleCrypto").textContent = "₿ क्रिप्टो मार्केट (Digital Assets)";
+    document.getElementById("titleNews").textContent = "📰 मार्केट इंटेलिजेंस न्यूज़ फ़ीड";
     document.getElementById("titleCalendar").textContent = "📅 अमेरिकी फेड (US Fed) और इकोनॉमिक कैलेंडर";
   } else {
     btn.textContent = "हिंदी में देखें";
-    document.getElementById("heroSub").textContent = "Indian Markets, Gold, Crypto & Global Economic News — सब कुछ एक जगह।";
+    document.getElementById("heroTitle").textContent = "Next-Gen Market & Macro Terminal";
+    document.getElementById("heroSub").textContent = "Track Indian Equities, Live Gold, Crypto & US Federal Reserve events impacting global liquidity — सब कुछ एक जगह।";
     document.getElementById("titleMarkets").textContent = "📊 Indian Markets";
-    document.getElementById("titleCharts").textContent = "📉 Interactive Live Charts (Sensex, Gold, Crypto)";
-    document.getElementById("titleGold").textContent = "🪙 Gold Market (Live)";
-    document.getElementById("titleCrypto").textContent = "₿ Crypto Market";
-    document.getElementById("titleNews").textContent = "📰 Latest Market & Business News";
-    document.getElementById("titleCalendar").textContent = "📅 US Fed & Global Economic Calendar";
+    document.getElementById("titleCharts").textContent = "📉 Live Pro Charts (Sensex, Gold, Crypto)";
+    document.getElementById("titleGold").textContent = "🪙 Bullion & Gold Market";
+    document.getElementById("titleCrypto").textContent = "₿ Digital Assets & Crypto";
+    document.getElementById("titleNews").textContent = "📰 Market Intelligence Feed";
+    document.getElementById("titleCalendar").textContent = "📅 US Fed & Global Macro Tracker";
   }
 }
 
@@ -536,7 +762,6 @@ function escapeHTML(value){
     .replace(/\'/g, "&#039;");
 }
 
-// Load TradingView Chart
 function loadChart(symbol, btnElement) {
   if (btnElement) {
     document.querySelectorAll(".chart-tabs button").forEach(b => b.classList.remove("active"));
@@ -550,13 +775,13 @@ function loadChart(symbol, btnElement) {
     "theme": "dark",
     "style": "1",
     "locale": "en",
+    "backgroundColor": "#0b1120",
     "container_id": "tv_chart_container"
   });
 }
 
 let allNews = [];
 
-// Smart Filter to remove irrelevant news (like IPL, recipes, movies)
 function isFinanceNews(article) {
   const text = ((article.title || "") + " " + (article.description || "")).toLowerCase();
   const financeKeywords = [
@@ -568,25 +793,23 @@ function isFinanceNews(article) {
   return financeKeywords.some(keyword => text.includes(keyword));
 }
 
-// Auto-tag Market Impact based on keywords
 function getMarketImpact(article) {
   const text = ((article.title || "") + " " + (article.description || "")).toLowerCase();
   if (text.includes("fed") || text.includes("inflation") || text.includes("rate")) {
-    return "🌐 Global Macro: Affects US Markets, Gold, Bitcoin & FII flows in India";
+    return "🌐 Macro Impact: Moves US Markets, Gold, BTC & FII flows";
   }
   if (text.includes("bitcoin") || text.includes("crypto") || text.includes("ethereum") || text.includes("solana")) {
-    return "₿ Crypto Sector: Direct impact on BTC, ETH & Altcoin sentiment";
+    return "₿ Crypto Impact: Direct effect on BTC, ETH & Altcoins";
   }
   if (text.includes("gold") || text.includes("silver")) {
-    return "🪙 Commodity Watch: Impacts Bullion & MCX Gold prices";
+    return "🪙 Bullion Impact: Affects MCX & Spot Gold prices";
   }
   if (text.includes("nifty") || text.includes("bank") || text.includes("rbi") || text.includes("profit")) {
-    return "🇮🇳 Indian Equities: Impacts Nifty 50 / Sectoral stocks";
+    return "🇮🇳 India Equity Impact: Moves Nifty & Sectoral stocks";
   }
-  return "📊 Market Watch: Key Business & Economy Update";
+  return "📊 Market Watch: Key Financial & Economy Update";
 }
 
-// 1. Load & Filter News
 async function loadNews(){
   const newsList = document.getElementById("newsList");
   try{
@@ -596,11 +819,10 @@ async function loadNews(){
       throw new Error(data.message || "News API error");
     }
     const rawArticles = data.articles || [];
-    // Filter out non-finance articles
     allNews = rawArticles.filter(isFinanceNews);
     displayNews(allNews);
   }catch(error){
-    newsList.innerHTML = `<div class="error">❌ News load नहीं हो सकी।<br><br>${error.message}</div>`;
+    newsList.innerHTML = `<div class="loading">❌ News load error: ${error.message}</div>`;
   }
 }
 
@@ -619,11 +841,15 @@ function displayNews(articles){
 
     return `
       <div class="news-card">
-        <div class="news-source">📰 ${escapeHTML(source)}</div>
-        <h3>${escapeHTML(title)}</h3>
-        <p>${escapeHTML(description)}</p>
-        <div class="impact">${impactText}</div>
-        <a href="${url}" target="_blank" rel="noopener noreferrer">Read Full News →</a>
+        <div>
+          <div class="news-source">⚡ ${escapeHTML(source)}</div>
+          <h3>${escapeHTML(title)}</h3>
+          <p>${escapeHTML(description)}</p>
+        </div>
+        <div>
+          <div class="impact">${impactText}</div>
+          <a href="${url}" target="_blank" rel="noopener noreferrer">Analyze Full Story →</a>
+        </div>
       </div>
     `;
   }).join("");
@@ -640,7 +866,6 @@ function searchNews(){
   displayNews(filtered);
 }
 
-// 2. Load Indian Markets
 async function loadMarketData() {
   try {
     const response = await fetch("https://market-valley.ykomal787.workers.dev/api/market?v=" + Date.now(), { cache: "no-store" });
@@ -674,18 +899,20 @@ async function loadMarketData() {
       return null;
     }
 
-    function updateCard(item, priceId, changeId, titleId = null) {
+    function updateCard(item, priceId, changeId, titleId = null, tickIds = []) {
       const priceElement = document.getElementById(priceId);
       const changeElement = document.getElementById(changeId);
       if (!item) {
         priceElement.textContent = "—";
-        changeElement.textContent = "Market Closed / N/A";
+        changeElement.textContent = "Market Closed";
         return;
       }
       if (titleId && item.symbol) {
         document.getElementById(titleId).textContent = item.symbol;
       }
-      priceElement.textContent = formatPrice(item.ltp);
+      const formatted = formatPrice(item.ltp);
+      priceElement.textContent = formatted;
+      
       const change = getChange(item);
       if (change === null) {
         changeElement.textContent = "—";
@@ -693,12 +920,19 @@ async function loadMarketData() {
       }
       const arrow = change >= 0 ? "▲" : "▼";
       const sign = change >= 0 ? "+" : "";
-      changeElement.textContent = arrow + " " + sign + change.toFixed(2) + "%";
-      changeElement.className = change >= 0 ? "green" : "red";
+      const changeStr = `${arrow} ${sign}${change.toFixed(2)}%`;
+      
+      changeElement.textContent = changeStr;
+      changeElement.className = "badge-change " + (change >= 0 ? "green" : "red");
+
+      tickIds.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.textContent = `${formatted} (${sign}${change.toFixed(2)}%)`;
+      });
     }
 
-    updateCard(nifty, "niftyPrice", "niftyChange");
-    updateCard(bankNifty, "bankniftyPrice", "bankNiftyChange");
+    updateCard(nifty, "niftyPrice", "niftyChange", null, ["tickNifty", "tickNifty2"]);
+    updateCard(bankNifty, "bankniftyPrice", "bankNiftyChange", null, ["tickBank"]);
     updateCard(thirdIndex, "thirdIndexPrice", "thirdIndexChange", "thirdIndexTitle");
 
   } catch (error) {
@@ -706,29 +940,34 @@ async function loadMarketData() {
   }
 }
 
-// 3. Load Live Crypto, Live Gold, and Live USD/INR
 async function loadCryptoGoldAndForex() {
   try {
     const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,pax-gold,tether&vs_currencies=inr,usd&include_24hr_change=true");
     const data = await response.json();
 
-    function updateCoin(coinId, priceId, changeId) {
+    function updateCoin(coinId, priceId, changeId, tickIds = []) {
       if(!data[coinId]) return;
       const priceINR = data[coinId].inr;
       const change24h = data[coinId].inr_24h_change;
+      const formattedPrice = "₹" + priceINR.toLocaleString("en-IN", { maximumFractionDigits: 0 });
 
-      document.getElementById(priceId).textContent = "₹" + priceINR.toLocaleString("en-IN", { maximumFractionDigits: 0 });
+      document.getElementById(priceId).textContent = formattedPrice;
       
       const el = document.getElementById(changeId);
       const arrow = change24h >= 0 ? "▲" : "▼";
       const sign = change24h >= 0 ? "+" : "";
-      el.textContent = arrow + " " + sign + change24h.toFixed(2) + "%";
-      el.className = change24h >= 0 ? "green" : "red";
+      el.textContent = `${arrow} ${sign}${change24h.toFixed(2)}%`;
+      el.className = "badge-change " + (change24h >= 0 ? "green" : "red");
+
+      tickIds.forEach(id => {
+        const t = document.getElementById(id);
+        if(t) t.textContent = `${formattedPrice} (${sign}${change24h.toFixed(2)}%)`;
+      });
     }
 
-    updateCoin("bitcoin", "bitcoinPrice", "bitcoinChange");
-    updateCoin("ethereum", "ethereumPrice", "ethereumChange");
-    updateCoin("solana", "solanaPrice", "solanaChange");
+    updateCoin("bitcoin", "bitcoinPrice", "bitcoinChange", ["tickBtc", "tickBtc2"]);
+    updateCoin("ethereum", "ethereumPrice", "ethereumChange", ["tickEth"]);
+    updateCoin("solana", "solanaPrice", "solanaChange", ["tickSol"]);
 
     if (data["tether"]) {
       const usdInr = data["tether"].inr;
@@ -736,7 +975,7 @@ async function loadCryptoGoldAndForex() {
       document.getElementById("usdPrice").textContent = "₹" + usdInr.toFixed(2);
       const usdEl = document.getElementById("usdChange");
       usdEl.textContent = (usdChange >= 0 ? "▲ +" : "▼ ") + usdChange.toFixed(2) + "%";
-      usdEl.className = usdChange >= 0 ? "green" : "red";
+      usdEl.className = "badge-change " + (usdChange >= 0 ? "green" : "red");
     }
 
     if (data["pax-gold"]) {
@@ -747,17 +986,23 @@ async function loadCryptoGoldAndForex() {
       document.getElementById("internationalGoldPrice").textContent = "$" + goldUsdPerOz.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       const intEl = document.getElementById("internationalGoldChange");
       intEl.textContent = (goldChange >= 0 ? "▲ +" : "▼ ") + goldChange.toFixed(2) + "%";
-      intEl.className = goldChange >= 0 ? "green" : "red";
+      intEl.className = "badge-change " + (goldChange >= 0 ? "green" : "red");
 
       const gold24k10g = (goldInrPerOz / 31.1035) * 10 * 1.06;
       const gold22k10g = gold24k10g * 0.916;
+      const formattedGold = "₹" + Math.round(gold24k10g).toLocaleString("en-IN");
 
-      document.getElementById("gold24Price").textContent = "₹" + Math.round(gold24k10g).toLocaleString("en-IN");
+      document.getElementById("gold24Price").textContent = formattedGold;
       document.getElementById("gold22Price").textContent = "₹" + Math.round(gold22k10g).toLocaleString("en-IN");
       
       const g24El = document.getElementById("gold24Change");
-      g24El.textContent = (goldChange >= 0 ? "▲ +" : "▼ ") + goldChange.toFixed(2) + "% (Live)";
-      g24El.className = goldChange >= 0 ? "green" : "red";
+      g24El.textContent = (goldChange >= 0 ? "▲ +" : "▼ ") + goldChange.toFixed(2) + "%";
+      g24El.className = "badge-change " + (goldChange >= 0 ? "green" : "red");
+
+      ["tickGold", "tickGold2"].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.textContent = formattedGold;
+      });
     }
 
   } catch(e) {
@@ -765,13 +1010,11 @@ async function loadCryptoGoldAndForex() {
   }
 }
 
-// Initial Calls
 loadChart("BSE:SENSEX", null);
 loadNews();
 loadMarketData();
 loadCryptoGoldAndForex();
 
-// Auto Refresh
 setInterval(loadMarketData, 30000);
 setInterval(loadCryptoGoldAndForex, 30000);
 </script>
