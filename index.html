@@ -4,7 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Market-Valley | Market Intelligence</title>
+<title>Market-Valley | Stock Market, Gold & Crypto Intelligence</title>
+<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 
 <style>
 *{
@@ -32,8 +33,16 @@ header{
   z-index:100;
 }
 
+.header-top{
+  max-width:1100px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
 .logo{
-  font-size:26px;
+  font-size:24px;
   font-weight:800;
   color:#ffd54a;
 }
@@ -41,11 +50,27 @@ header{
 .tagline{
   color:#9fb0c7;
   font-size:12px;
-  margin-top:4px;
+  margin-top:2px;
+}
+
+.lang-btn{
+  background:#ffd54a;
+  color:#07111f;
+  border:none;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  font-size:12px;
+  cursor:pointer;
+}
+
+.lang-btn:hover{
+  background:#ffdf73;
 }
 
 nav{
-  margin-top:14px;
+  max-width:1100px;
+  margin:14px auto 0;
   display:flex;
   gap:8px;
   overflow-x:auto;
@@ -55,10 +80,11 @@ nav button{
   background:#14243a;
   color:#fff;
   border:1px solid #29405e;
-  padding:9px 14px;
+  padding:8px 14px;
   border-radius:20px;
   white-space:nowrap;
   cursor:pointer;
+  font-size:13px;
 }
 
 nav button:hover{
@@ -66,8 +92,9 @@ nav button:hover{
 }
 
 .hero{
-  padding:30px 16px;
+  padding:24px 16px;
   background:linear-gradient(135deg,#0b1d35,#07111f);
+  border-bottom:1px solid #16263d;
 }
 
 .container{
@@ -77,18 +104,22 @@ nav button:hover{
 }
 
 .hero h1{
-  font-size:32px;
-  margin-bottom:8px;
+  font-size:28px;
+  margin-bottom:6px;
 }
 
 .hero p{
   color:#aebed2;
-  line-height:1.6;
+  line-height:1.5;
+  font-size:14px;
 }
 
 .section-title{
-  font-size:21px;
-  margin:26px 0 14px;
+  font-size:20px;
+  margin:24px 0 14px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 .market-grid{
@@ -125,6 +156,43 @@ nav button:hover{
 
 .yellow{
   color:#ffd54a;
+}
+
+/* Chart Box */
+.chart-box{
+  background:#0e1c2e;
+  border:1px solid #213650;
+  border-radius:14px;
+  padding:16px;
+  margin-top:16px;
+}
+
+.chart-tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:12px;
+  flex-wrap:wrap;
+}
+
+.chart-tabs button{
+  background:#14243a;
+  color:#fff;
+  border:1px solid #29405e;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:12px;
+}
+
+.chart-tabs button.active, .chart-tabs button:hover{
+  background:#ffd54a;
+  color:#07111f;
+  font-weight:700;
+}
+
+#tv_chart_container{
+  height:360px;
+  width:100%;
 }
 
 .search{
@@ -174,6 +242,8 @@ nav button:hover{
   margin-top:12px;
   color:#7fc3ff;
   text-decoration:none;
+  font-size:13px;
+  font-weight:bold;
 }
 
 .news-card a:hover{
@@ -185,7 +255,7 @@ nav button:hover{
   padding:9px;
   border-radius:8px;
   background:#13263b;
-  font-size:13px;
+  font-size:12px;
   color:#d9e5f2;
 }
 
@@ -241,7 +311,7 @@ footer{
 }
 
 .status{
-  margin-top:10px;
+  margin-top:8px;
   font-size:12px;
   color:#38e08f;
 }
@@ -251,139 +321,208 @@ footer{
 <body>
 
 <header>
-<div class="logo">MARKET-VALLEY 📈</div>
-<div class="tagline">Smart Market Intelligence • Hindi + English</div>
-<nav>
-<button onclick="showSection('markets')">Markets</button>
-<button onclick="showSection('gold')">Gold</button>
-<button onclick="showSection('crypto')">Crypto</button>
-<button onclick="showSection('news')">News</button>
-<button onclick="showSection('calendar')">Calendar</button>
-</nav>
+  <div class="header-top">
+    <div>
+      <div class="logo">MARKET-VALLEY 📈</div>
+      <div class="tagline" id="taglineText">Smart Market Intelligence • Hindi + English</div>
+    </div>
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">हिंदी में देखें</button>
+  </div>
+
+  <nav>
+    <button onclick="showSection('markets')" id="navMarkets">Markets</button>
+    <button onclick="showSection('charts')" id="navCharts">Live Charts</button>
+    <button onclick="showSection('gold')" id="navGold">Gold</button>
+    <button onclick="showSection('crypto')" id="navCrypto">Crypto</button>
+    <button onclick="showSection('news')" id="navNews">News</button>
+    <button onclick="showSection('calendar')" id="navCalendar">US Fed & Calendar</button>
+  </nav>
 </header>
 
 <section class="hero">
-<div class="container">
-<h1>Market-Valley</h1>
-<p>Indian Markets, Gold, Crypto & Global Economic News — सब कुछ एक जगह।</p>
-<div class="status">● All Live Feeds Active</div>
-</div>
+  <div class="container">
+    <h1 id="heroTitle">Market-Valley</h1>
+    <p id="heroSub">Indian Markets, Gold, Crypto & Global Economic News — सब कुछ एक जगह।</p>
+    <div class="status">● All Live Feeds Active</div>
+  </div>
 </section>
 
 <main class="container">
 
 <!-- MARKETS -->
 <section id="markets">
-<h2 class="section-title">📊 Indian Markets</h2>
-<div class="market-grid">
-<div class="card">
-<div class="card-title">NIFTY 50</div>
-<div class="price" id="niftyPrice">Loading...</div>
-<div class="yellow" id="niftyChange">Fetching...</div>
-</div>
-<div class="card">
-<div class="card-title">BANK NIFTY</div>
-<div class="price" id="bankniftyPrice">Loading...</div>
-<div class="yellow" id="bankNiftyChange">Fetching...</div>
-</div>
-<div class="card">
-<div class="card-title" id="thirdIndexTitle">NIFTY IT / FIN</div>
-<div class="price" id="thirdIndexPrice">Loading...</div>
-<div class="yellow" id="thirdIndexChange">Fetching...</div>
-</div>
-<div class="card">
-<div class="card-title">USD / INR (Live)</div>
-<div class="price" id="usdPrice">Loading...</div>
-<div class="green" id="usdChange">Forex Spot</div>
-</div>
-</div>
+  <h2 class="section-title" id="titleMarkets">📊 Indian Markets</h2>
+  <div class="market-grid">
+    <div class="card">
+      <div class="card-title">NIFTY 50</div>
+      <div class="price" id="niftyPrice">Loading...</div>
+      <div class="yellow" id="niftyChange">Fetching...</div>
+    </div>
+    <div class="card">
+      <div class="card-title">BANK NIFTY</div>
+      <div class="price" id="bankniftyPrice">Loading...</div>
+      <div class="yellow" id="bankNiftyChange">Fetching...</div>
+    </div>
+    <div class="card">
+      <div class="card-title" id="thirdIndexTitle">NIFTY NEXT 50</div>
+      <div class="price" id="thirdIndexPrice">Loading...</div>
+      <div class="yellow" id="thirdIndexChange">Fetching...</div>
+    </div>
+    <div class="card">
+      <div class="card-title">USD / INR (Live)</div>
+      <div class="price" id="usdPrice">Loading...</div>
+      <div class="green" id="usdChange">Forex Spot</div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE CHARTS (Includes SENSEX!) -->
+<section id="charts">
+  <h2 class="section-title" id="titleCharts">📉 Interactive Live Charts (Sensex, Gold, Crypto)</h2>
+  <div class="chart-box">
+    <div class="chart-tabs">
+      <button class="active" onclick="loadChart('BSE:SENSEX', this)">BSE SENSEX</button>
+      <button onclick="loadChart('TVC:GOLD', this)">GOLD (XAU)</button>
+      <button onclick="loadChart('BINANCE:BTCUSDT', this)">BITCOIN</button>
+      <button onclick="loadChart('BINANCE:ETHUSDT', this)">ETHEREUM</button>
+      <button onclick="loadChart('BINANCE:SOLUSDT', this)">SOLANA</button>
+    </div>
+    <div id="tv_chart_container"></div>
+  </div>
 </section>
 
 <!-- GOLD -->
 <section id="gold">
-<h2 class="section-title">🪙 Gold Market (Live)</h2>
-<div class="market-grid">
-<div class="card">
-  <div class="card-title">Gold 24K (10g India Est.)</div>
-  <div class="price yellow" id="gold24Price">Loading...</div>
-  <div class="green" id="gold24Change">Fetching live...</div>
-</div>
-<div class="card">
-  <div class="card-title">International Gold (1 oz)</div>
-  <div class="price" id="internationalGoldPrice">Loading...</div>
-  <div class="green" id="internationalGoldChange">XAU / USD Live</div>
-</div>
-<div class="card">
-  <div class="card-title">Gold 22K (10g Jewelry Est.)</div>
-  <div class="price yellow" id="gold22Price">Loading...</div>
-  <div class="green">916 Hallmark Est.</div>
-</div>
-</div>
+  <h2 class="section-title" id="titleGold">🪙 Gold Market (Live)</h2>
+  <div class="market-grid">
+    <div class="card">
+      <div class="card-title">Gold 24K (10g India Est.)</div>
+      <div class="price yellow" id="gold24Price">Loading...</div>
+      <div class="green" id="gold24Change">Fetching live...</div>
+    </div>
+    <div class="card">
+      <div class="card-title">International Gold (1 oz)</div>
+      <div class="price" id="internationalGoldPrice">Loading...</div>
+      <div class="green" id="internationalGoldChange">XAU / USD Live</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Gold 22K (10g Jewelry Est.)</div>
+      <div class="price yellow" id="gold22Price">Loading...</div>
+      <div class="green">916 Hallmark Est.</div>
+    </div>
+  </div>
 </section>
 
 <!-- CRYPTO -->
 <section id="crypto">
-<h2 class="section-title">₿ Crypto Market</h2>
-<div class="market-grid">
-<div class="card">
-  <div class="card-title">Bitcoin (BTC)</div>
-  <div class="price" id="bitcoinPrice">Loading...</div>
-  <div id="bitcoinChange" class="yellow">Live data...</div>
-</div>
-<div class="card">
-  <div class="card-title">Ethereum (ETH)</div>
-  <div class="price" id="ethereumPrice">Loading...</div>
-  <div id="ethereumChange" class="yellow">Live data...</div>
-</div>
-<div class="card">
-  <div class="card-title">Solana (SOL)</div>
-  <div class="price" id="solanaPrice">Loading...</div>
-  <div id="solanaChange" class="yellow">Live data...</div>
-</div>
-</div>
+  <h2 class="section-title" id="titleCrypto">₿ Crypto Market</h2>
+  <div class="market-grid">
+    <div class="card">
+      <div class="card-title">Bitcoin (BTC)</div>
+      <div class="price" id="bitcoinPrice">Loading...</div>
+      <div id="bitcoinChange" class="yellow">Live data...</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Ethereum (ETH)</div>
+      <div class="price" id="ethereumPrice">Loading...</div>
+      <div id="ethereumChange" class="yellow">Live data...</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Solana (SOL)</div>
+      <div class="price" id="solanaPrice">Loading...</div>
+      <div id="solanaChange" class="yellow">Live data...</div>
+    </div>
+  </div>
 </section>
 
 <!-- NEWS -->
 <section id="news">
-<h2 class="section-title">📰 Latest Market News</h2>
-<input id="searchBox" class="search" type="text" placeholder="Search news / खबर खोजें..." oninput="searchNews()">
-<div id="newsList" class="news">
-<div class="loading">⏳ Loading latest news...</div>
-</div>
+  <h2 class="section-title" id="titleNews">📰 Latest Market & Business News</h2>
+  <input id="searchBox" class="search" type="text" placeholder="Search stock, gold, crypto, Fed news / खबर खोजें..." oninput="searchNews()">
+  <div id="newsList" class="news">
+    <div class="loading">⏳ Loading filtered market news...</div>
+  </div>
 </section>
 
 <!-- CALENDAR -->
 <section id="calendar">
-<h2 class="section-title">📅 Economic Calendar</h2>
-<div class="calendar">
-<table>
-<thead>
-<tr>
-<th>Date</th>
-<th>Event</th>
-<th>Country</th>
-<th>Importance</th>
-<th>Market Impact</th>
-</tr>
-</thead>
-<tbody>
-<tr><td>Upcoming</td><td>US CPI Inflation</td><td>🇺🇸 USA</td><td>🔴 High</td><td>🟡 High</td></tr>
-<tr><td>Upcoming</td><td>Federal Reserve (FOMC) Decision</td><td>🇺🇸 USA</td><td>🔴 High</td><td>🟢/🔴 Major</td></tr>
-<tr><td>Upcoming</td><td>Non-Farm Payrolls</td><td>🇺🇸 USA</td><td>🔴 High</td><td>🟡 High</td></tr>
-<tr><td>Upcoming</td><td>RBI Policy Meeting</td><td>🇮🇳 India</td><td>🟠 Medium</td><td>🟡 Moderate</td></tr>
-</tbody>
-</table>
-</div>
+  <h2 class="section-title" id="titleCalendar">📅 US Fed & Global Economic Calendar</h2>
+  <div class="calendar">
+    <table>
+      <thead>
+        <tr>
+          <th>Event / बैठक</th>
+          <th>Country</th>
+          <th>Importance</th>
+          <th>Impact on Stocks, Gold & BTC</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>US FOMC / Federal Reserve Meeting</strong></td>
+          <td>🇺🇸 USA</td>
+          <td>🔴 High</td>
+          <td>Interest rate cuts boost Nifty, Gold & Bitcoin; hikes put pressure.</td>
+        </tr>
+        <tr>
+          <td><strong>US CPI (Inflation Data)</strong></td>
+          <td>🇺🇸 USA</td>
+          <td>🔴 High</td>
+          <td>Lower inflation weakens USD and triggers rally in Gold & Crypto.</td>
+        </tr>
+        <tr>
+          <td><strong>US Non-Farm Payrolls (Jobs Data)</strong></td>
+          <td>🇺🇸 USA</td>
+          <td>🔴 High</td>
+          <td>Strong job growth delays rate cuts; affects FII flow in India.</td>
+        </tr>
+        <tr>
+          <td><strong>RBI Monetary Policy (MPC)</strong></td>
+          <td>🇮🇳 India</td>
+          <td>🔴 High</td>
+          <td>Directly moves Bank Nifty, Nifty 50, and Rupee (USD/INR).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </section>
 
 </main>
 
 <footer>
-<strong>MARKET-VALLEY 📈</strong>
-<div class="disclaimer">Educational information only. This website does not provide financial or investment advice.</div>
+  <strong>MARKET-VALLEY 📈</strong>
+  <div class="disclaimer">Educational information only. This website does not provide financial or investment advice.</div>
 </footer>
 
 <script>
+let currentLang = "en";
+
+// Bilingual Toggle Function
+function toggleLang() {
+  currentLang = currentLang === "en" ? "hi" : "en";
+  const btn = document.getElementById("langBtn");
+
+  if (currentLang === "hi") {
+    btn.textContent = "Switch to English";
+    document.getElementById("heroSub").textContent = "भारतीय शेयर बाजार, सोना (Gold), क्रिप्टो और अमेरिकी फेड (US Fed) की ताज़ा खबरें — सब कुछ एक जगह।";
+    document.getElementById("titleMarkets").textContent = "📊 भारतीय शेयर बाजार (Indian Markets)";
+    document.getElementById("titleCharts").textContent = "📉 लाइव चार्ट्स (सेंसेक्स, गोल्ड, क्रिप्टो)";
+    document.getElementById("titleGold").textContent = "🪙 सोने का ताज़ा भाव (Gold Market)";
+    document.getElementById("titleCrypto").textContent = "₿ क्रिप्टो मार्केट (Crypto Market)";
+    document.getElementById("titleNews").textContent = "📰 शेयर बाजार और बिज़नेस की बड़ी खबरें";
+    document.getElementById("titleCalendar").textContent = "📅 अमेरिकी फेड (US Fed) और इकोनॉमिक कैलेंडर";
+  } else {
+    btn.textContent = "हिंदी में देखें";
+    document.getElementById("heroSub").textContent = "Indian Markets, Gold, Crypto & Global Economic News — सब कुछ एक जगह।";
+    document.getElementById("titleMarkets").textContent = "📊 Indian Markets";
+    document.getElementById("titleCharts").textContent = "📉 Interactive Live Charts (Sensex, Gold, Crypto)";
+    document.getElementById("titleGold").textContent = "🪙 Gold Market (Live)";
+    document.getElementById("titleCrypto").textContent = "₿ Crypto Market";
+    document.getElementById("titleNews").textContent = "📰 Latest Market & Business News";
+    document.getElementById("titleCalendar").textContent = "📅 US Fed & Global Economic Calendar";
+  }
+}
+
 function showSection(id){
   document.getElementById(id).scrollIntoView({ behavior:"smooth" });
 }
@@ -397,9 +536,57 @@ function escapeHTML(value){
     .replace(/\'/g, "&#039;");
 }
 
+// Load TradingView Chart
+function loadChart(symbol, btnElement) {
+  if (btnElement) {
+    document.querySelectorAll(".chart-tabs button").forEach(b => b.classList.remove("active"));
+    btnElement.classList.add("active");
+  }
+  new TradingView.widget({
+    "autosize": true,
+    "symbol": symbol,
+    "interval": "D",
+    "timezone": "Asia/Kolkata",
+    "theme": "dark",
+    "style": "1",
+    "locale": "en",
+    "container_id": "tv_chart_container"
+  });
+}
+
 let allNews = [];
 
-// 1. Load News
+// Smart Filter to remove irrelevant news (like IPL, recipes, movies)
+function isFinanceNews(article) {
+  const text = ((article.title || "") + " " + (article.description || "")).toLowerCase();
+  const financeKeywords = [
+    "stock", "market", "nifty", "sensex", "share", "equity", "bank", "rbi", "fed", "federal",
+    "inflation", "cpi", "interest rate", "gold", "silver", "crypto", "bitcoin", "btc", "ethereum",
+    "solana", "economy", "gdp", "profit", "revenue", "earnings", "ipo", "sebi", "fii", "dii",
+    "rupee", "dollar", "forex", "crude", "oil", "investor", "fund", "etf", "trading", "bull", "bear"
+  ];
+  return financeKeywords.some(keyword => text.includes(keyword));
+}
+
+// Auto-tag Market Impact based on keywords
+function getMarketImpact(article) {
+  const text = ((article.title || "") + " " + (article.description || "")).toLowerCase();
+  if (text.includes("fed") || text.includes("inflation") || text.includes("rate")) {
+    return "🌐 Global Macro: Affects US Markets, Gold, Bitcoin & FII flows in India";
+  }
+  if (text.includes("bitcoin") || text.includes("crypto") || text.includes("ethereum") || text.includes("solana")) {
+    return "₿ Crypto Sector: Direct impact on BTC, ETH & Altcoin sentiment";
+  }
+  if (text.includes("gold") || text.includes("silver")) {
+    return "🪙 Commodity Watch: Impacts Bullion & MCX Gold prices";
+  }
+  if (text.includes("nifty") || text.includes("bank") || text.includes("rbi") || text.includes("profit")) {
+    return "🇮🇳 Indian Equities: Impacts Nifty 50 / Sectoral stocks";
+  }
+  return "📊 Market Watch: Key Business & Economy Update";
+}
+
+// 1. Load & Filter News
 async function loadNews(){
   const newsList = document.getElementById("newsList");
   try{
@@ -408,7 +595,9 @@ async function loadNews(){
     if(data.status !== "ok"){
       throw new Error(data.message || "News API error");
     }
-    allNews = data.articles || [];
+    const rawArticles = data.articles || [];
+    // Filter out non-finance articles
+    allNews = rawArticles.filter(isFinanceNews);
     displayNews(allNews);
   }catch(error){
     newsList.innerHTML = `<div class="error">❌ News load नहीं हो सकी।<br><br>${error.message}</div>`;
@@ -418,20 +607,22 @@ async function loadNews(){
 function displayNews(articles){
   const newsList = document.getElementById("newsList");
   if(!articles.length){
-    newsList.innerHTML = `<div class="loading">अभी कोई latest business news उपलब्ध नहीं है।</div>`;
+    newsList.innerHTML = `<div class="loading">अभी कोई नई मार्केट खबर उपलब्ध नहीं है।</div>`;
     return;
   }
   newsList.innerHTML = articles.map(article => {
     const title = article.title || "Untitled News";
     const description = article.description || "Latest market news and business update.";
-    const source = article.source?.name || "News Source";
+    const source = article.source?.name || "Market Desk";
     const url = article.url || "#";
+    const impactText = getMarketImpact(article);
+
     return `
       <div class="news-card">
         <div class="news-source">📰 ${escapeHTML(source)}</div>
         <h3>${escapeHTML(title)}</h3>
         <p>${escapeHTML(description)}</p>
-        <div class="impact">📊 Market Impact: Live Market Update</div>
+        <div class="impact">${impactText}</div>
         <a href="${url}" target="_blank" rel="noopener noreferrer">Read Full News →</a>
       </div>
     `;
@@ -449,7 +640,7 @@ function searchNews(){
   displayNews(filtered);
 }
 
-// 2. Load Indian Markets (Nifty, BankNifty + 3rd Available Index)
+// 2. Load Indian Markets
 async function loadMarketData() {
   try {
     const response = await fetch("https://market-valley.ykomal787.workers.dev/api/market?v=" + Date.now(), { cache: "no-store" });
@@ -462,8 +653,6 @@ async function loadMarketData() {
 
     const nifty = data.find(item => ["NIFTY50", "NIFTY"].includes(normalizeSymbol(item.symbol)));
     const bankNifty = data.find(item => ["NIFTYBANK", "BANKNIFTY"].includes(normalizeSymbol(item.symbol)));
-    
-    // Find Sensex if available, otherwise pick any other available index from your worker (like FINNIFTY / NIFTYIT / INDIAVIX)
     const thirdIndex = data.find(item => {
       const s = normalizeSymbol(item.symbol);
       return !["NIFTY50", "NIFTY", "NIFTYBANK", "BANKNIFTY"].includes(s);
@@ -517,14 +706,12 @@ async function loadMarketData() {
   }
 }
 
-// 3. Load Live Crypto, Live Gold (PAXG = 1 oz Gold), and Live USD/INR from CoinGecko
+// 3. Load Live Crypto, Live Gold, and Live USD/INR
 async function loadCryptoGoldAndForex() {
   try {
-    // Fetching BTC, ETH, SOL, PAX-GOLD (Live Gold Spot), and TETHER (Live USD/INR rate)
     const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,pax-gold,tether&vs_currencies=inr,usd&include_24hr_change=true");
     const data = await response.json();
 
-    // Update Crypto
     function updateCoin(coinId, priceId, changeId) {
       if(!data[coinId]) return;
       const priceINR = data[coinId].inr;
@@ -543,7 +730,6 @@ async function loadCryptoGoldAndForex() {
     updateCoin("ethereum", "ethereumPrice", "ethereumChange");
     updateCoin("solana", "solanaPrice", "solanaChange");
 
-    // Update Live USD/INR Rate (via USDT/INR)
     if (data["tether"]) {
       const usdInr = data["tether"].inr;
       const usdChange = data["tether"].inr_24h_change;
@@ -553,19 +739,16 @@ async function loadCryptoGoldAndForex() {
       usdEl.className = usdChange >= 0 ? "green" : "red";
     }
 
-    // Update Live Gold (PAX Gold = 1 Troy Ounce of Physical Gold)
     if (data["pax-gold"]) {
       const goldUsdPerOz = data["pax-gold"].usd;
       const goldInrPerOz = data["pax-gold"].inr;
       const goldChange = data["pax-gold"].usd_24h_change;
 
-      // International Gold (USD per oz)
       document.getElementById("internationalGoldPrice").textContent = "$" + goldUsdPerOz.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       const intEl = document.getElementById("internationalGoldChange");
       intEl.textContent = (goldChange >= 0 ? "▲ +" : "▼ ") + goldChange.toFixed(2) + "%";
       intEl.className = goldChange >= 0 ? "green" : "red";
 
-      // Indian 24K Gold per 10g (1 Troy Ounce = 31.1035 grams + ~6% Indian Import Duty & GST)
       const gold24k10g = (goldInrPerOz / 31.1035) * 10 * 1.06;
       const gold22k10g = gold24k10g * 0.916;
 
@@ -583,6 +766,7 @@ async function loadCryptoGoldAndForex() {
 }
 
 // Initial Calls
+loadChart("BSE:SENSEX", null);
 loadNews();
 loadMarketData();
 loadCryptoGoldAndForex();
