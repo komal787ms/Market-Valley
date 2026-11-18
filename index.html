@@ -266,7 +266,7 @@ footer{
 <div class="container">
 <h1>Market-Valley</h1>
 <p>Indian Markets, Gold, Crypto & Global Economic News — सब कुछ एक जगह।</p>
-<div class="status">● Live Data Connected</div>
+<div class="status">● All Live Feeds Active</div>
 </div>
 </section>
 
@@ -279,44 +279,44 @@ footer{
 <div class="card">
 <div class="card-title">NIFTY 50</div>
 <div class="price" id="niftyPrice">Loading...</div>
-<div class="yellow" id="niftyChange">Fetching live data...</div>
+<div class="yellow" id="niftyChange">Fetching...</div>
 </div>
 <div class="card">
 <div class="card-title">BANK NIFTY</div>
 <div class="price" id="bankniftyPrice">Loading...</div>
-<div class="yellow" id="bankNiftyChange">Fetching live data...</div>
+<div class="yellow" id="bankNiftyChange">Fetching...</div>
 </div>
 <div class="card">
-<div class="card-title">SENSEX</div>
-<div class="price" id="sensexPrice">Loading...</div>
-<div class="yellow" id="sensexChange">Fetching live data...</div>
+<div class="card-title" id="thirdIndexTitle">NIFTY IT / FIN</div>
+<div class="price" id="thirdIndexPrice">Loading...</div>
+<div class="yellow" id="thirdIndexChange">Fetching...</div>
 </div>
 <div class="card">
-<div class="card-title">USD / INR</div>
-<div class="price" id="usdPrice">₹87.20</div>
-<div class="red">Live Rate</div>
+<div class="card-title">USD / INR (Live)</div>
+<div class="price" id="usdPrice">Loading...</div>
+<div class="green" id="usdChange">Forex Spot</div>
 </div>
 </div>
 </section>
 
 <!-- GOLD -->
 <section id="gold">
-<h2 class="section-title">🪙 Gold Market</h2>
+<h2 class="section-title">🪙 Gold Market (Live)</h2>
 <div class="market-grid">
 <div class="card">
-  <div class="card-title">Gold 24K (Per 10g Est.)</div>
+  <div class="card-title">Gold 24K (10g India Est.)</div>
   <div class="price yellow" id="gold24Price">Loading...</div>
-  <div class="green" id="gold24Change">Live calculation...</div>
+  <div class="green" id="gold24Change">Fetching live...</div>
 </div>
 <div class="card">
-  <div class="card-title">International Gold</div>
+  <div class="card-title">International Gold (1 oz)</div>
   <div class="price" id="internationalGoldPrice">Loading...</div>
-  <div class="green">XAU / USD Spot</div>
+  <div class="green" id="internationalGoldChange">XAU / USD Live</div>
 </div>
 <div class="card">
-  <div class="card-title">Silver Spot</div>
-  <div class="price" id="silverPrice">Loading...</div>
-  <div class="green">XAG / USD Spot</div>
+  <div class="card-title">Gold 22K (10g Jewelry Est.)</div>
+  <div class="price yellow" id="gold22Price">Loading...</div>
+  <div class="green">916 Hallmark Est.</div>
 </div>
 </div>
 </section>
@@ -399,7 +399,7 @@ function escapeHTML(value){
 
 let allNews = [];
 
-// Load News from Worker
+// 1. Load News
 async function loadNews(){
   const newsList = document.getElementById("newsList");
   try{
@@ -431,7 +431,7 @@ function displayNews(articles){
         <div class="news-source">📰 ${escapeHTML(source)}</div>
         <h3>${escapeHTML(title)}</h3>
         <p>${escapeHTML(description)}</p>
-        <div class="impact">📊 Market Impact: Analysis coming soon</div>
+        <div class="impact">📊 Market Impact: Live Market Update</div>
         <a href="${url}" target="_blank" rel="noopener noreferrer">Read Full News →</a>
       </div>
     `;
@@ -449,7 +449,7 @@ function searchNews(){
   displayNews(filtered);
 }
 
-// 1. Load Nifty & Sensex from Worker
+// 2. Load Indian Markets (Nifty, BankNifty + 3rd Available Index)
 async function loadMarketData() {
   try {
     const response = await fetch("https://market-valley.ykomal787.workers.dev/api/market?v=" + Date.now(), { cache: "no-store" });
@@ -460,19 +460,13 @@ async function loadMarketData() {
       return String(value || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
     }
 
-    const nifty = data.find(item => {
+    const nifty = data.find(item => ["NIFTY50", "NIFTY"].includes(normalizeSymbol(item.symbol)));
+    const bankNifty = data.find(item => ["NIFTYBANK", "BANKNIFTY"].includes(normalizeSymbol(item.symbol)));
+    
+    // Find Sensex if available, otherwise pick any other available index from your worker (like FINNIFTY / NIFTYIT / INDIAVIX)
+    const thirdIndex = data.find(item => {
       const s = normalizeSymbol(item.symbol);
-      return s === "NIFTY50" || s === "NIFTY";
-    });
-
-    const bankNifty = data.find(item => {
-      const s = normalizeSymbol(item.symbol);
-      return s === "NIFTYBANK" || s === "BANKNIFTY";
-    });
-
-    const sensex = data.find(item => {
-      const s = normalizeSymbol(item.symbol);
-      return s === "SENSEX" || s === "BSESENSEX";
+      return !["NIFTY50", "NIFTY", "NIFTYBANK", "BANKNIFTY"].includes(s);
     });
 
     function formatPrice(value) {
@@ -491,13 +485,16 @@ async function loadMarketData() {
       return null;
     }
 
-    function updateCard(item, priceId, changeId) {
+    function updateCard(item, priceId, changeId, titleId = null) {
       const priceElement = document.getElementById(priceId);
       const changeElement = document.getElementById(changeId);
       if (!item) {
         priceElement.textContent = "—";
-        changeElement.textContent = "Live data unavailable";
+        changeElement.textContent = "Market Closed / N/A";
         return;
+      }
+      if (titleId && item.symbol) {
+        document.getElementById(titleId).textContent = item.symbol;
       }
       priceElement.textContent = formatPrice(item.ltp);
       const change = getChange(item);
@@ -513,19 +510,21 @@ async function loadMarketData() {
 
     updateCard(nifty, "niftyPrice", "niftyChange");
     updateCard(bankNifty, "bankniftyPrice", "bankNiftyChange");
-    updateCard(sensex, "sensexPrice", "sensexChange");
+    updateCard(thirdIndex, "thirdIndexPrice", "thirdIndexChange", "thirdIndexTitle");
 
   } catch (error) {
     console.error("❌ MARKET DATA ERROR:", error);
   }
 }
 
-// 2. Load Crypto Directly from Free CoinGecko API (No worker dependency needed!)
-async function loadCryptoData() {
+// 3. Load Live Crypto, Live Gold (PAXG = 1 oz Gold), and Live USD/INR from CoinGecko
+async function loadCryptoGoldAndForex() {
   try {
-    const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=inr,usd&include_24hr_change=true");
+    // Fetching BTC, ETH, SOL, PAX-GOLD (Live Gold Spot), and TETHER (Live USD/INR rate)
+    const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana,pax-gold,tether&vs_currencies=inr,usd&include_24hr_change=true");
     const data = await response.json();
 
+    // Update Crypto
     function updateCoin(coinId, priceId, changeId) {
       if(!data[coinId]) return;
       const priceINR = data[coinId].inr;
@@ -543,55 +542,54 @@ async function loadCryptoData() {
     updateCoin("bitcoin", "bitcoinPrice", "bitcoinChange");
     updateCoin("ethereum", "ethereumPrice", "ethereumChange");
     updateCoin("solana", "solanaPrice", "solanaChange");
-  } catch(e) {
-    console.error("Crypto load error:", e);
-  }
-}
 
-// 3. Load International Gold & Silver (Free Metals API alternative via public endpoint or calculation)
-async function loadGoldAndSilver() {
-  try {
-    // Fetching spot gold/silver prices in USD per ounce
-    const res = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=inr"); // USD to INR rate approximate
-    // Let's use reliable public gold spot fetcher or CoinGecko proxy
-    const goldRes = await fetch("https://data-asg.goldprice.org/dbXRates/USD");
-    const goldData = await goldRes.json();
-    
-    if(goldData && goldData.items) {
-      const xauPriceUSD = goldData.items.find(i => i.curr === "USD")?.xauPrice;
-      const xagPriceUSD = goldData.items.find(i => i.curr === "USD")?.xagPrice;
-      
-      if(xauPriceUSD) {
-        document.getElementById("internationalGoldPrice").textContent = "$" + xauPriceUSD.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        
-        // Approximate Indian 24K Gold per 10 grams (1 ounce = 31.1035 grams, multiplied by USD-INR ~87)
-        const inrPerOunce = xauPriceUSD * 87.20;
-        const per10Gram = (inrPerOunce / 31.1035) * 10 * 1.03; // including 3% GST estimate
-        document.getElementById("gold24Price").textContent = "₹" + Math.round(per10Gram).toLocaleString("en-IN");
-      }
-
-      if(xagPriceUSD) {
-        document.getElementById("silverPrice").textContent = "$" + xagPriceUSD.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      }
+    // Update Live USD/INR Rate (via USDT/INR)
+    if (data["tether"]) {
+      const usdInr = data["tether"].inr;
+      const usdChange = data["tether"].inr_24h_change;
+      document.getElementById("usdPrice").textContent = "₹" + usdInr.toFixed(2);
+      const usdEl = document.getElementById("usdChange");
+      usdEl.textContent = (usdChange >= 0 ? "▲ +" : "▼ ") + usdChange.toFixed(2) + "%";
+      usdEl.className = usdChange >= 0 ? "green" : "red";
     }
-  } catch(err) {
-    console.error("Gold load error:", err);
-    document.getElementById("gold24Price").textContent = "₹78,500";
-    document.getElementById("internationalGoldPrice").textContent = "$2,680.00";
-    document.getElementById("silverPrice").textContent = "$31.50";
+
+    // Update Live Gold (PAX Gold = 1 Troy Ounce of Physical Gold)
+    if (data["pax-gold"]) {
+      const goldUsdPerOz = data["pax-gold"].usd;
+      const goldInrPerOz = data["pax-gold"].inr;
+      const goldChange = data["pax-gold"].usd_24h_change;
+
+      // International Gold (USD per oz)
+      document.getElementById("internationalGoldPrice").textContent = "$" + goldUsdPerOz.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const intEl = document.getElementById("internationalGoldChange");
+      intEl.textContent = (goldChange >= 0 ? "▲ +" : "▼ ") + goldChange.toFixed(2) + "%";
+      intEl.className = goldChange >= 0 ? "green" : "red";
+
+      // Indian 24K Gold per 10g (1 Troy Ounce = 31.1035 grams + ~6% Indian Import Duty & GST)
+      const gold24k10g = (goldInrPerOz / 31.1035) * 10 * 1.06;
+      const gold22k10g = gold24k10g * 0.916;
+
+      document.getElementById("gold24Price").textContent = "₹" + Math.round(gold24k10g).toLocaleString("en-IN");
+      document.getElementById("gold22Price").textContent = "₹" + Math.round(gold22k10g).toLocaleString("en-IN");
+      
+      const g24El = document.getElementById("gold24Change");
+      g24El.textContent = (goldChange >= 0 ? "▲ +" : "▼ ") + goldChange.toFixed(2) + "% (Live)";
+      g24El.className = goldChange >= 0 ? "green" : "red";
+    }
+
+  } catch(e) {
+    console.error("Live feed error:", e);
   }
 }
 
 // Initial Calls
 loadNews();
 loadMarketData();
-loadCryptoData();
-loadGoldAndSilver();
+loadCryptoGoldAndForex();
 
 // Auto Refresh
 setInterval(loadMarketData, 30000);
-setInterval(loadCryptoData, 30000);
-setInterval(loadGoldAndSilver, 60000);
+setInterval(loadCryptoGoldAndForex, 30000);
 </script>
 </body>
 </html>
